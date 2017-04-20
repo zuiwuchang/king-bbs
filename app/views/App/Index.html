@@ -1,21 +1,39 @@
 {{set . "title" "Home"}}
 {{template "header.html" .}}
 
-<header class="jumbotron" style="background-color:#A9F16C">
-  <div class="container">
-    <div class="row">
-      <h1>It works!</h1>
-      <p></p>
-    </div>
-  </div>
-</header>
+<div class="container-fluid">
+<div class="row">
 
-<div class="container">
-  <div class="row">
-    <div class="span6">
-      {{template "flash.html" .}}
-    </div>
-  </div>
+<div class="col-sm-4">
+<div class="panel panel-default">
+	<div class="panel-heading">最新文章</div>
+	<div class="panel-body">
+		Panel content
+	</div>
 </div>
+</div><!--	/col	-->
+
+<div class="col-sm-4">
+<div class="panel panel-default">
+	<div class="panel-heading">熱門文章</div>
+	<div class="panel-body">
+		Panel content
+	</div>
+</div>
+</div><!--	/col	-->
+
+<div class="col-sm-4">
+<div class="panel panel-default">
+	<div class="panel-heading">精選文章</div>
+	<div class="panel-body">
+		Panel content
+	</div>
+</div>
+</div><!--	/col	-->
+
+
+
+</div>
+
 
 {{template "footer.html" .}}
