@@ -1,0 +1,18 @@
+{{set . "title" (msg . "about.Title")}}
+{{template "header.html" .}}
+
+<div class="container-fluid">
+<div class="jumbotron">
+	<h1>{{msg . "about.H1"}}</h1>
+	<p>{{msg . "about.Text"}}</p>
+	<p>
+		<div>
+			about king <a href="https://zuiwuchang.blogspot.jp/">https://zuiwuchang.blogspot.jp/</a>
+		</div>
+		<div>
+			github <a href="https://github.com/zuiwuchang/king-bbs">https://github.com/zuiwuchang/king-bbs</a>
+		</div>
+	</p>
+</div>
+</div>
+{{template "footer.html" .}}

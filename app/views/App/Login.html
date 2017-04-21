@@ -1,0 +1,36 @@
+{{set . "title" "登入"}}
+{{template "header.html" .}}
+
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-offset-4  col-md-4">
+<form class="form">
+	<div class="form-group">
+		<input type="text" class="form-control" id="inputEmail" placeholder="用戶名/郵箱">
+	</div>
+	<div class="form-group">
+		<input type="text" class="form-control" id="inputEmail" placeholder="密碼">
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary">登入</button>
+		&nbsp;&nbsp;&nbsp;
+		<a href="#">忘記密碼?</a>
+	</div>
+
+</form>
+</div>
+</div>
+</div>
+{{template "footer.html" .}}
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$(function () {
+		$('[data-toggle="popover"]').popover()
+	});
+	$("form").submit(function(event) {
+		$('#msgNew').popover('toggle').focus();
+		return false;
+	});
+});
+</script>

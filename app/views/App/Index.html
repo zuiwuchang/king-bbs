@@ -1,39 +1,533 @@
 {{set . "title" "Home"}}
 {{template "header.html" .}}
 
+<style type="text/css">
+*{
+    word-wrap: break-word;
+}
+.k-text-center{
+	text-align: center;
+}
+.k-list-box{
+	background-image: url(/public/img/list_bg_7ree.gif);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+.k-list-item{
+	border-bottom:1px dashed #CDCDCD;
+	margin-left: 5px;
+	height: 20px;
+	line-height: 19px;
+	overflow: hidden;
+	word-break: break-all;
+}
+.k-list-t{
+	color: #333;
+	
+}
+.k-list-r{
+	float: right;
+	margin-right: 5px;
+	color: #999999;
+}
+.k-hide-panel{
+	float: right;
+	cursor: pointer;
+	color: #D70F16;;
+}
+.k-author{
+	color: #999999;
+}
+.k-c2{
+	color: #666;
+}
+.k-fl{
+	width: 100%;
+}
+.k-fl td{
+	padding: 10px 0;
+	height: 84px;
+}
+.k-fl-icon{
+	width: 64px;
+}
+.k-fl-sum{
+	width: 150px;
+}
+.k-fl-last{
+	width: 220px;
+}
+.k-fl-n td{
+	border-top: 1px dashed #CDCDCD;
+}
+.k-fl-main{
+	margin-left: 20px;
+	overflow: hidden;
+	word-break: break-all;
+	height: 64px;
+}
+</style>
+
 <div class="container-fluid">
 <div class="row">
 
 <div class="col-sm-4">
 <div class="panel panel-default">
-	<div class="panel-heading">最新文章</div>
+	<div class="panel-heading k-text-center">最新文章</div>
 	<div class="panel-body">
-		Panel content
+	<div class="k-list-box">
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[king]</a>
+			<a href="#" class="k-list-t">c++ boost 之 智能指針</a>
+		</div>
+
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[zuiwuchang]</a>
+			<a href="#" class="k-list-t">c++ boost 之 正在表達式</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[kate]</a>
+			<a href="#" class="k-list-t">golang 遊戲服務器</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[zuiwuchang]</a>
+			<a href="#" class="k-list-t">1天 精通 goalng</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[cerberus]</a>
+			<a href="#" class="k-list-t">黑客教學</a>
+		</div>
+
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[cerberus]</a>
+			<a href="#" class="k-list-t">vip教學</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[illusive man]</a>
+			<a href="#" class="k-list-t">最近 0day 漏洞</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[kign]</a>
+			<a href="#" class="k-list-t">rootkit 原理</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[zuiwuchang]</a>
+			<a href="#" class="k-list-t">windows amd64 hook 驅動</a>
+		</div>
+
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[李煜]</a>
+			<a href="#" class="k-list-t">浣溪沙</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[李煜]</a>
+			<a href="#" class="k-list-t">九月十日偶書</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[羅尼]</a>
+			<a href="#" class="k-list-t">斯諾克世錦賽</a>
+		</div>
+	</div>
 	</div>
 </div>
 </div><!--	/col	-->
 
 <div class="col-sm-4">
 <div class="panel panel-default">
-	<div class="panel-heading">熱門文章</div>
+	<div class="panel-heading k-text-center">熱門文章</div>
 	<div class="panel-body">
-		Panel content
+	<div class="k-list-box">
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[king]</a>
+			<a href="#" class="k-list-t">c++ boost 之 智能指針</a>
+		</div>
+
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[zuiwuchang]</a>
+			<a href="#" class="k-list-t">c++ boost 之 正在表達式</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[kate]</a>
+			<a href="#" class="k-list-t">golang 遊戲服務器</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[zuiwuchang]</a>
+			<a href="#" class="k-list-t">1天 精通 goalng</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[cerberus]</a>
+			<a href="#" class="k-list-t">黑客教學</a>
+		</div>
+
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[cerberus]</a>
+			<a href="#" class="k-list-t">vip教學</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[illusive man]</a>
+			<a href="#" class="k-list-t">最近 0day 漏洞</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[kign]</a>
+			<a href="#" class="k-list-t">rootkit 原理</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[zuiwuchang]</a>
+			<a href="#" class="k-list-t">windows amd64 hook 驅動</a>
+		</div>
+
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[李煜]</a>
+			<a href="#" class="k-list-t">浣溪沙</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[李煜]</a>
+			<a href="#" class="k-list-t">九月十日偶書</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[羅尼]</a>
+			<a href="#" class="k-list-t">斯諾克世錦賽</a>
+		</div>
+	</div>
 	</div>
 </div>
 </div><!--	/col	-->
 
 <div class="col-sm-4">
 <div class="panel panel-default">
-	<div class="panel-heading">精選文章</div>
+	<div class="panel-heading k-text-center">精選文章</div>
 	<div class="panel-body">
-		Panel content
+	<div class="k-list-box">
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[king]</a>
+			<a href="#" class="k-list-t">c++ boost 之 智能指針</a>
+		</div>
+
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[zuiwuchang]</a>
+			<a href="#" class="k-list-t">c++ boost 之 正在表達式</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[kate]</a>
+			<a href="#" class="k-list-t">golang 遊戲服務器</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[zuiwuchang]</a>
+			<a href="#" class="k-list-t">1天 精通 goalng</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[cerberus]</a>
+			<a href="#" class="k-list-t">黑客教學</a>
+		</div>
+
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[cerberus]</a>
+			<a href="#" class="k-list-t">vip教學</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[illusive man]</a>
+			<a href="#" class="k-list-t">最近 0day 漏洞</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[kign]</a>
+			<a href="#" class="k-list-t">rootkit 原理</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[zuiwuchang]</a>
+			<a href="#" class="k-list-t">windows amd64 hook 驅動</a>
+		</div>
+
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[李煜]</a>
+			<a href="#" class="k-list-t">浣溪沙</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[李煜]</a>
+			<a href="#" class="k-list-t">九月十日偶書</a>
+		</div>
+		<div class="k-list-item">
+			<a href="#" class="k-list-r">[羅尼]</a>
+			<a href="#" class="k-list-t">斯諾克世錦賽</a>
+		</div>
+	</div>
 	</div>
 </div>
 </div><!--	/col	-->
 
 
+</div><!--	/row	-->
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<a href="#">論壇特區</a>
+		<span class="glyphicon glyphicon-minus-sign k-hide-panel"></span>
+	</div>
+	<div class="panel-body">
+	<div class="row">
+		<div class="col-md-4">
+			<table><tr>
+			<td>
+				<a href="#">
+				<img src="/public/img/group/63.png">
+				</a>
+			</td>
+			
+			<td>
+			<div style="margin-left: 20px;">
+				<div><a href="#">提问专区</a></div>
+				<div>主题: 1万, 帖数: 6万</div>
+				<div>最后发表: 昨天 20:52</div>
+			</div></td>
+			</tr></table>
+		</div>
+		<div class="col-md-4">
+			<table><tr>
+			<td>
+				<a href="#">
+				<img src="/public/img/group/64.png">
+				</a>
+			</td>
+
+			<td>
+			<div style="margin-left: 20px;">
+				<div><a href="#">活动专区</a></div>
+				<div>主题: 333, 帖数: 5776</div>
+				<div>最后发表: 2017-3-27 09:11</div>
+			</div></td>
+			</tr></table>
+		</div>
+		<div class="col-md-4">
+			<table><tr>
+			<td>
+				<a href="#">
+				<img src="/public/img/group/65.png">
+				</a>
+			</td>
+
+			<td>
+			<div style="margin-left: 20px;">
+				<div><a href="#">会员原创 (1)</a></div>
+				<div>主题: 779, 帖数: 6万</div>
+				<div>最后发表: 3 小时前</div>
+			</div></td>
+			</tr></table>
+		</div>
+	</div>
+	</div>
+
 
 </div>
 
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<a href="#">VIP專區</a>
+		<span class="glyphicon glyphicon-minus-sign k-hide-panel"></span>
+	</div>
+	<div class="panel-body">
+	<div class="row">
+		<div class="col-md-6">
+			<table><tr>
+			<td>
+				<a href="#">
+				<img src="/public/img/group/67.png">
+				</a>
+			</td>
 
+			<td>
+			<div style="margin-left: 20px;">
+				<div><a href="#">VIP-有問必答</a></div>
+				<div>主题: 687, 帖数: 3万</div>
+				<div>
+					<a href="#">斯諾克世錦賽</a>
+					<span>&nbsp;&nbsp;&nbsp;2017-3-27 09:11&nbsp;&nbsp;&nbsp;</span>
+					<a href="#" class="k-author">[羅尼]</a>
+				</div>
+			</div></td>
+			</tr></table>
+		</div>
+
+		<div class="col-md-6">
+			<table><tr>
+			<td>
+				<a href="#">
+				<img src="/public/img/group/66.png">
+				</a>
+			</td>
+
+			<td>
+			<div style="margin-left: 20px;">
+				<div><a href="#">VIP-教學</a></div>
+				<div>主题: 111, 帖数: 4215</div>
+				<div>
+					<a href="#">1天 精通 goalng</a>
+					<span>&nbsp;&nbsp;&nbsp;2017-5-27 09:11&nbsp;&nbsp;&nbsp;</span>
+					<a href="#" class="k-author">[king]</a>
+				</div>
+			</div></td>
+			</tr></table>
+		</div>
+	</div>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<a href="#">技術交流</a>
+		<span class="glyphicon glyphicon-minus-sign k-hide-panel"></span>
+	</div>
+	<div class="panel-body">
+<table class="k-fl">
+	<tr>
+		<td class="k-fl-icon">
+			<a href="#">
+			<img src="/public/img/group/24.png">
+			</a>
+		</td>
+		<td>
+		<div class="k-fl-main">
+			<div>
+				<a href="#">數據結構 & 算法 (2)</a>
+			</div>
+			<div class="k-c2">
+				數據結構 算法 原理分析 研究
+			</div>
+		</div>
+		</td>
+		<td class="k-fl-sum">
+			<div class="k-c2" style="padding: 8px;">
+				228 / 1万
+			</div>
+		</td>
+		<td class="k-fl-last">
+			<div><a href="#">斯諾克世錦賽</a>
+			<div>2017-3-27 09:11</div>
+			<div><a href="#" class="k-author">[羅尼]</a>
+			</div>
+		</td>
+	</tr>
+
+	<tr class="k-fl-n">
+		<td class="k-fl-icon">
+			<a href="#">
+			<img src="/public/img/group/25.png">
+			</a>
+		</td>
+		<td>
+		<div class="k-fl-main">
+			<div>
+				<a href="#">驅動編程</a>
+			</div>
+			<div class="k-c2">
+				os 內核 hook
+			</div>
+		</div>
+		</td>
+		<td class="k-fl-sum">
+			<div class="k-c2" style="padding: 8px;">
+				228 / 1万
+			</div>
+		</td>
+		<td class="k-fl-last">
+			<div><a href="#">浪淘沙</a>
+			<div>2013-3-27 09:11</div>
+			<div><a href="#" class="k-author">[李煜]</a>
+			</div>
+		</td>
+	</tr>
+
+	<tr class="k-fl-n">
+		<td class="k-fl-icon">
+			<a href="#">
+			<img src="/public/img/group/26.png">
+			</a>
+		</td>
+		<td>
+		<div class="k-fl-main">
+			<div>
+				<a href="#">遊戲編程</a>
+			</div>
+			<div class="k-c2">
+				踏上成爲藝術家之路
+			</div>
+		</div>
+		</td>
+		<td class="k-fl-sum">
+			<div class="k-c2" style="padding: 8px;">
+				228 / 1万
+			</div>
+		</td>
+		<td class="k-fl-last">
+			<div><a href="#">Mass Effect 3</a>
+			<div>2010-3-27 09:11</div>
+			<div><a href="#" class="k-author">[EA]</a>
+			</div>
+		</td>
+	</tr>
+</table>
+	
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<a href="#">站內管理</a>
+		<span class="glyphicon glyphicon-minus-sign k-hide-panel"></span>
+	</div>
+	<div class="panel-body">
+	<div class="row">
+		<div class="col-md-6">
+			<table><tr>
+			<td>
+				<a href="#">
+				<img src="/public/img/group/40.png">
+				</a>
+			</td>
+
+			<td>
+			<div style="margin-left: 20px;">
+				<div><a href="#">建議提交</a></div>
+				<div>主题: 687, 帖数: 3万</div>
+				<div>
+					<a href="#">斯諾克世錦賽</a>
+					<span>&nbsp;&nbsp;&nbsp;2017-3-27 09:11&nbsp;&nbsp;&nbsp;</span>
+					<a href="#" class="k-author">[羅尼]</a>
+				</div>
+			</div></td>
+			</tr></table>
+		</div>
+
+		<div class="col-md-6">
+			<table><tr>
+			<td>
+				<a href="#">
+				<img src="/public/img/group/41.png">
+				</a>
+			</td>
+
+			<td>
+			<div style="margin-left: 20px;">
+				<div><a href="#">論壇事務</a></div>
+				<div>主题: 111, 帖数: 4215</div>
+				<div>
+					<a href="#">1天 精通 goalng</a>
+					<span>&nbsp;&nbsp;&nbsp;2017-5-27 09:11&nbsp;&nbsp;&nbsp;</span>
+					<a href="#" class="k-author">[king]</a>
+				</div>
+			</div></td>
+			</tr></table>
+		</div>
+	</div>
+	</div>
+</div>
+
+</div><!--	/container-fluid	-->
 {{template "footer.html" .}}
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".k-hide-panel").click(function(event) {
+		var jq = $(this).parent(".panel-heading:first").next(".panel-body:first");
+		jq.toggle("fast");
+	});
+});
+</script>

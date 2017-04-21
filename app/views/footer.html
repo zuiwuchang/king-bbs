@@ -1,5 +1,14 @@
-  {{if eq .RunMode "dev"}}
-    {{template "debug.html" .}}
-  {{end}}
-  </body>
+	{{if eq .RunMode "dev"}}
+		{{template "debug.html" .}}
+	{{end}}
+
+	<div style="text-align: center;padding: 8px;">
+		<div>
+			<a href="https://zuiwuchang.blogspot.jp/" target="_blank">{{msg . "footer.Technical Support"}}king</a>
+		</div>
+		<div>
+			<a href="https://github.com/zuiwuchang/king-bbs" target="_blank">{{msg . "footer.Project Addr"}}https://github.com/zuiwuchang/king-bbs</a>
+		</div>
+	</div>
+	</body>
 </html>

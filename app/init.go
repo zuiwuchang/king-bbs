@@ -1,6 +1,8 @@
 package app
 
-import "github.com/revel/revel"
+import (
+	"github.com/revel/revel"
+)
 
 func init() {
 	// Filters is the default set of global filters.
@@ -12,11 +14,20 @@ func init() {
 		revel.SessionFilter,           // Restore and write the session cookie.
 		revel.FlashFilter,             // Restore and write the flash cookie.
 		revel.ValidationFilter,        // Restore kept validation errors and save new ones from cookie.
-		revel.I18nFilter,              // Resolve the requested language
-		HeaderFilter,                  // Add some security based headers
-		revel.InterceptorFilter,       // Run interceptors around the action.
-		revel.CompressFilter,          // Compress the result.
-		revel.ActionInvoker,           // Invoke the action.
+		func(c *revel.Controller, fc []revel.Filter) {
+			//替換默認的 i18n 解析
+			locale := "zh"
+
+			c.Request.Locale = locale
+			c.RenderArgs[revel.CurrentLocaleRenderArg] = locale
+
+			fc[0](c, fc[1:])
+		},
+		//revel.I18nFilter, // Resolve the requested language
+		HeaderFilter,            // Add some security based headers
+		revel.InterceptorFilter, // Run interceptors around the action.
+		revel.CompressFilter,    // Compress the result.
+		revel.ActionInvoker,     // Invoke the action.
 	}
 
 	// register startup functions with OnAppStart

@@ -1,0 +1,17 @@
+Title=Cerberus
+
+#	header
+header.Welcome to community=歡迎來到 Cerberus 社區
+header.Community Description=我們提供最專業的技術支持
+header.write new=寫文章
+header.about=關於
+
+
+#	footer
+footer.Technical Support=技術支持：
+footer.Project Addr=項目地址：
+
+#	about
+about.Title=關於 Cerberus
+about.H1=Cerberus 是甚麼
+about.Text=cerberus it's an idea 這是cerberus創始人illusive man的原話。<br>cerberus是一種理念，任何認同這種理念的人就是cerberus。<br>這種理念的核心就是保證人類的利益和發展，爲此可以不計任何代價，故我們通常關注科技和人權，因爲這是保證人類利益和發展的基本要素。
