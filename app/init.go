@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/revel/revel"
+	"king-bbs/app/modules/db/manipulator"
 )
 
 func init() {
@@ -32,7 +33,10 @@ func init() {
 
 	// register startup functions with OnAppStart
 	// ( order dependent )
-	// revel.OnAppStart(InitDB)
+	revel.OnAppStart(func() {
+		//初始化 數據庫
+		manipulator.Initialize()
+	})
 	// revel.OnAppStart(FillCache)
 }
 

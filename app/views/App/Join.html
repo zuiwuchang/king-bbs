@@ -1,12 +1,22 @@
 {{set . "title" "註冊"}}
 {{template "header.html" .}}
 
+<style type="text/css">
+.k-ui-popover-right{
+	margin-left: 10px;
+	position:absolute;
+}
+</style>
 <div class="container-fluid">
 <div class="row">
 <div class="col-md-offset-4  col-md-4">
 <form class="form">
 	<div class="form-group">
-		<input type="text" class="form-control" id="inputEmail" placeholder="用戶名">
+		<input type="text" class="form-control" id="inputUser" placeholder="用戶名">
+
+		<div class="k-ui-popover" id="view">
+			123
+		</div>
 	</div>
 	<div class="form-group">
 		<input type="text" class="form-control" id="inputEmail" placeholder="郵箱">
@@ -30,8 +40,14 @@ $(document).ready(function() {
 		$('[data-toggle="popover"]').popover()
 	});
 	$("form").submit(function(event) {
-		$('#msgNew').popover('toggle').focus();
+		$('#btnShow').popover('toggle').focus();
 		return false;
 	});
+
+	(function(){
+		var jq = $("#inputUser");
+		var jqView = $("#view");
+		alert(jq.position().top)
+	})();
 });
 </script>
