@@ -27,47 +27,6 @@
 </div>
 </div>
 </div>
-<ol>
-	<li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li><li></li>
-	<li></li>
-	<li></li>
-</ol>
 {{template "footer.html" .}}
 
 
@@ -79,8 +38,8 @@ $(document).ready(function() {
 	var popover = kui.NewPopover({
 		"Target":$("#idGroup"),
 		"Title":"測試",
-		"Content":"正文1234567890asddsadssasddasds<br>1<br>1<br>1",
-		"Arrow":"left",
+		"Content":"測試123451234567890asddsadssasddasds123<br>1<br>2<br>3",
+		"Arrow":"bottom",
 	});
 	var size = popover.Size();
 
@@ -90,11 +49,12 @@ $(document).ready(function() {
 		}else{
 			var pos = jq.offset();
 			var size = popover.Size()
-			var h = -size.H / 2
-			h += $("#idGroup").height() / 3
+			var h = -size.H;
+			h += $("#idGroup").height() * 2 / 3
+			
 			popover.Offset({
-				Top:h +"px",
-				Left:"30%;",
+				Top:h + "px",
+				Left:"10%;",
 			});
 
 			popover.Show();

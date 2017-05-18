@@ -49,10 +49,12 @@
 	font-size:14px;
 	background-color:#f7f7f7;
 	border-bottom:1px solid #ebebeb;
-	border-radius:5px 5px 0 0
+	border-radius:5px 5px 0 0;
+	overflow: hidden;
 }
 .kui-popover-content {
-	padding:9px 14px
+	padding:9px 14px;
+	overflow: hidden;
 }
 .kui-popover>.arrow,.kui-popover>.arrow:after {
 	position:absolute;
@@ -72,7 +74,7 @@
 
 .kui-popover.bottom>.arrow {
 	bottom:-11px;
-	left:50%;
+	left:30%;
 	margin-left:-11px;
 	border-top-color:#999;
 	border-top-color:rgba(0,0,0,.25);
@@ -86,7 +88,7 @@
 	border-bottom-width:0
 }
 .kui-popover.left>.arrow {
-	top:50%;
+	top:30%;
 	left:-11px;
 	margin-top:-11px;
 	border-right-color:#999;
@@ -102,7 +104,7 @@
 }
 .kui-popover.top>.arrow {
 	top:-11px;
-	left:50%;
+	left:30%;
 	margin-left:-11px;
 	border-top-width:0;
 	border-bottom-color:#999;
@@ -116,7 +118,7 @@
 	border-bottom-color:#fff
 }
 .kui-popover.right>.arrow {
-	top:50%;
+	top:30%;
 	right:-11px;
 	margin-top:-11px;
 	border-right-width:0;
