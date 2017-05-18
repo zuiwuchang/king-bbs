@@ -18,13 +18,12 @@ func init() {
 		func(c *revel.Controller, fc []revel.Filter) {
 			//替換默認的 i18n 解析
 			locale := "zh"
-
 			c.Request.Locale = locale
 			c.RenderArgs[revel.CurrentLocaleRenderArg] = locale
 
 			fc[0](c, fc[1:])
 		},
-		//revel.I18nFilter, // Resolve the requested language
+		//revel.I18nFilter,        // Resolve the requested language
 		HeaderFilter,            // Add some security based headers
 		revel.InterceptorFilter, // Run interceptors around the action.
 		revel.CompressFilter,    // Compress the result.

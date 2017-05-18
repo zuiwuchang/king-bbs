@@ -1,22 +1,17 @@
 {{set . "title" "註冊"}}
 {{template "header.html" .}}
 
-<style type="text/css">
-.k-ui-popover-right{
-	margin-left: 10px;
-	position:absolute;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="/public/js/kui/popover.css">
+<script type="text/javascript" src="/public/js/kui/popover.js"></script>
+
+
 <div class="container-fluid">
 <div class="row">
 <div class="col-md-offset-4  col-md-4">
 <form class="form">
-	<div class="form-group">
+	<div class="form-group" id="idGroup">
 		<input type="text" class="form-control" id="inputUser" placeholder="用戶名">
 
-		<div class="k-ui-popover" id="view">
-			123
-		</div>
 	</div>
 	<div class="form-group">
 		<input type="text" class="form-control" id="inputEmail" placeholder="郵箱">
@@ -32,22 +27,79 @@
 </div>
 </div>
 </div>
+<ol>
+	<li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li><li></li>
+	<li></li>
+	<li></li>
+</ol>
 {{template "footer.html" .}}
+
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$(function () {
-		$('[data-toggle="popover"]').popover()
+	var jq = $("#idGroup");
+	
+
+	var popover = kui.NewPopover({
+		"Target":$("#idGroup"),
+		"Title":"測試",
+		"Content":"正文1234567890asddsadssasddasds<br>1<br>1<br>1",
+		"Arrow":"left",
 	});
+	var size = popover.Size();
+
 	$("form").submit(function(event) {
-		$('#btnShow').popover('toggle').focus();
+		if(popover.IsVisible()){
+			popover.Hide();
+		}else{
+			var pos = jq.offset();
+			var size = popover.Size()
+			var h = -size.H / 2
+			h += $("#idGroup").height() / 3
+			popover.Offset({
+				Top:h +"px",
+				Left:"30%;",
+			});
+
+			popover.Show();
+		}
 		return false;
 	});
-
-	(function(){
-		var jq = $("#inputUser");
-		var jqView = $("#view");
-		alert(jq.position().top)
-	})();
 });
 </script>
