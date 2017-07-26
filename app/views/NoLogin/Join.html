@@ -1,0 +1,91 @@
+{{set . "title" "註冊"}}
+{{template "header.html" .}}
+
+<link rel="stylesheet" type="text/css" href="/public/js/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+<script type="text/javascript" src="/public/js/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/public/js/kui/popover.css">
+<script type="text/javascript" src="/public/js/kui/popover.js"></script>
+
+<style type="text/css">
+.table{
+	display: table;
+	position: relative;
+}
+.table input{
+	display: table-cell;
+}
+.request-flag{
+	display: table-cell;
+	padding-left: 5px;
+	width: 20px;
+}
+</style>
+
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-offset-4  col-md-4">
+<form class="form">
+	<div class="form-group table" id='idViewName'>
+		<input type="text" class="form-control" placeholder='{{msg . "Join.name"}}' id='idValName'>
+		
+		<div class="request-flag">
+			<span class="glyphicon glyphicon-question-sign" id='idFlagName'></span>
+		</div>
+	</div>
+
+	<div class="form-group table" id='idViewEmail'>
+		<input type="text" class="form-control" placeholder='{{msg . "Join.email"}}' id='idValEmail'>
+		<div class="request-flag">
+			<span class="glyphicon glyphicon-question-sign" id='idFlagEmail'></span>
+		</div>
+	</div>
+	<div class="form-group table" id='idViewPwd'>
+		<input type="text" class="form-control" placeholder='{{msg . "Join.pwd"}}' id='idValPwd'>
+		<div class="request-flag">
+			<span class="glyphicon glyphicon-question-sign" id='idFlagPwd'></span>
+		</div>
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary">{{msg . "Join.go"}}</button>
+	</div>
+</form>
+</div>
+</div>
+</div>
+{{template "footer.html" .}}
+
+
+{{if .DevMode}}
+	<script type="text/javascript" src="/public/views/util.js"></script>
+
+	<script type="text/javascript" src="/public/views/NoLogin/Join.js"></script>
+{{else}}
+	<script type="text/javascript" src="/public/views/util.min.js"></script>
+
+	<script type="text/javascript" src="/public/views/NoLogin/Join.min.js"></script>
+{{end}}
+<script type="text/javascript">
+$(document).ready(function() {
+	NewPageContent({
+		lange:{
+			errorNet:'{{msg . "error.net"}}',
+
+			name:'{{msg . "Join.name"}}',
+			nameAsk:'{{msg . "Join.nameAsk"}}',
+			nameError:'{{msg . "Join.nameError"}}',
+			nameExists:'{{msg . "Join.nameExists"}}',
+
+
+			email:'{{msg . "Join.email"}}',
+			emailAsk:'{{msg . "Join.emailAsk"}}',
+			emailError:'{{msg . "Join.emailError"}}',
+			emailExists:'{{msg . "Join.emailExists"}}',
+
+			pwd:'{{msg . "Join.pwd"}}',
+			pwdAsk:'{{msg . "Join.pwdAsk"}}',
+			pwdError:'{{msg . "Join.pwdError"}}',
+		},
+	});
+});
+</script>

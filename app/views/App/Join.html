@@ -1,23 +1,46 @@
-{{set . "title" "註冊"}}
+{{set . "title" (msg . "Join.title") }}
 {{template "header.html" .}}
 
 <link rel="stylesheet" type="text/css" href="/public/js/kui/popover.css">
 <script type="text/javascript" src="/public/js/kui/popover.js"></script>
 
+<style type="text/css">
+.table{
+	display: table;
+}
+.table input{
+	display: table-cell;
+}
+.request-flag{
+	display: table-cell;
+	padding-left: 5px;
+	width: 20px;
+}
+</style>
 
 <div class="container-fluid">
 <div class="row">
 <div class="col-md-offset-4  col-md-4">
 <form class="form">
-	<div class="form-group" id="idGroup">
+	<div class="form-group table" id="idGroup">
 		<input type="text" class="form-control" id="inputUser" placeholder="用戶名">
+		
+		<div class="request-flag">
+			<span class="glyphicon"></span>
+		</div>
+	</div>
 
-	</div>
-	<div class="form-group">
+	<div class="form-group table">
 		<input type="text" class="form-control" id="inputEmail" placeholder="郵箱">
+		<div class="request-flag">
+			<span class="glyphicon"></span>
+		</div>
 	</div>
-	<div class="form-group">
+	<div class="form-group table">
 		<input type="text" class="form-control" id="inputEmail" placeholder="密碼">
+		<div class="request-flag">
+			<span class="glyphicon"></span>
+		</div>
 	</div>
 	<div class="form-group">
 		<button type="submit" class="btn btn-primary">註冊</button>
@@ -32,8 +55,9 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+
+	return;
 	var jq = $("#idGroup");
-	
 
 	var popover = kui.NewPopover({
 		"Target":$("#idGroup"),

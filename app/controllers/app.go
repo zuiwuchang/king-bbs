@@ -2,6 +2,7 @@ package controllers
 
 import "github.com/revel/revel"
 
+//所有用戶 都可訪問
 type App struct {
 	*revel.Controller
 }
@@ -13,15 +14,5 @@ func (c App) Index() revel.Result {
 
 //關於
 func (c App) About() revel.Result {
-	return c.Render()
-}
-
-//登入
-func (c App) Login() revel.Result {
-	return c.Render()
-}
-
-//註冊
-func (c App) Join() revel.Result {
 	return c.Render()
 }
