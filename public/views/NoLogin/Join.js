@@ -18,6 +18,11 @@ function NewPageContent(params){
 		var match = obj.Match;
 		var noTrim = obj.NoTrim;
 
+		//存儲合法 值
+		var _val = "";
+		//存儲最後 驗證值
+		var _last = "";
+
 		//初始化 jquery ui
 		jqFlag.tooltip();
 
@@ -55,17 +60,24 @@ function NewPageContent(params){
 		jqVal.focusout(function(){
 			popover.Hide();
 
-			//清空狀態
-			jqFlag.removeClass('glyphicon-ok-sign');
-			jqFlag.removeClass('glyphicon-remove-sign');
-			jqFlag.removeClass('glyphicon-question-sign');
-			jqFlag.attr('title','');
-
 			//返回數據
 			var val = jqVal.val();
 			if(!noTrim){
 				val = $.trim(val);
 			}
+
+			//如果 剛剛 驗證過 直接返回 避免重複驗證
+			if(_last == val){
+				return;
+			}
+			//更新最後 驗證值
+			_last = val;
+
+			//重置狀態
+			jqFlag.removeClass('glyphicon-ok-sign');
+			jqFlag.removeClass('glyphicon-remove-sign');
+			jqFlag.removeClass('glyphicon-question-sign');
+			jqFlag.attr('title','');
 
 			//驗證 格式
 			if(!match(val)){
@@ -77,6 +89,8 @@ function NewPageContent(params){
 			//驗證 重複
 			if(!url){
 				jqFlag.addClass('glyphicon-ok-sign');
+				//更新 合法值
+				_val = val;
 				return;
 			}
 			$.ajax({
@@ -89,11 +103,16 @@ function NewPageContent(params){
 				if(!(rs instanceof Object)){
 					jqFlag.attr('title', lange["errorNet"]);
 					jqFlag.addClass('glyphicon-remove-sign');
+					//未知錯誤 允許 繼續嘗試驗證 
+					_last = "";
 					return;
 				}
 				if(CODE_OK != rs.Code){
 					jqFlag.attr('title', rs.Emsg);
 					jqFlag.addClass('glyphicon-remove-sign');
+
+					//錯誤 允許 繼續嘗試驗證 
+					_last = "";
 					return;
 				}
 
@@ -102,16 +121,28 @@ function NewPageContent(params){
 					jqFlag.addClass('glyphicon-remove-sign');
 				}else{
 					jqFlag.addClass('glyphicon-ok-sign');
+					//更新 合法值
+					_val = val;
 				}
 			})
 			.fail(function() {
 				jqFlag.attr('title', lange["errorNet"]);
 				jqFlag.addClass('glyphicon-remove-sign');
+
+				//網絡異常 允許 繼續嘗試驗證 
+				_last = "";
 			});
 		});
 		return {
 			HidePopover:function(){
 				popover.Hide();
+			},
+			GetVal:function(){
+				return _val;
+			},
+			Focus:function(){
+				jqVal.select();
+				jqVal.focus();
 			},
 		};
 	};
@@ -151,4 +182,35 @@ function NewPageContent(params){
 		"NoTrim":true,
 	});
 	uis.push(uiPwd);
+
+	/***	綁定事件	***/
+	var jqValPwdGo = $("#idValPwdGo")
+	$("form").submit(function(){
+		//name
+		var ui = uiName;
+		var name = ui.GetVal();
+		if(!name){
+			ui.Focus();
+			return false;
+		}
+
+		//email
+		ui = uiEmail;
+		var email = ui.GetVal();
+		if(!email){
+			ui.Focus();
+			return false;
+		}
+
+		//pwd
+		ui = uiPwd;
+		var pwd = ui.GetVal();
+		if(!pwd){
+			ui.Focus();
+			return false;
+		}
+		pwd = CryptoJS.SHA512(pwd).toString();
+		jqValPwdGo.val(pwd);
+		return true;
+	});
 }

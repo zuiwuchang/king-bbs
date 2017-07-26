@@ -1,5 +1,17 @@
 package ajax
 
+const (
+	//bool
+	True  = 1
+	False = 0
+
+	//執行成功
+	Ok = 0
+
+	//數據庫 返回錯誤
+	ErrorDb = 100
+)
+
 type ResultBase struct {
 	//錯誤碼
 	Code int

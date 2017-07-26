@@ -7,6 +7,8 @@
 <link rel="stylesheet" type="text/css" href="/public/js/kui/popover.css">
 <script type="text/javascript" src="/public/js/kui/popover.js"></script>
 
+<script type="text/javascript" src="/public/js/CryptoJS v3.1.2/rollups/sha512.js"></script>
+
 <style type="text/css">
 .table{
 	display: table;
@@ -25,9 +27,9 @@
 <div class="container-fluid">
 <div class="row">
 <div class="col-md-offset-4  col-md-4">
-<form class="form">
+<form class="form" action="/NoLogin/NewUser" method="post">
 	<div class="form-group table" id='idViewName'>
-		<input type="text" class="form-control" placeholder='{{msg . "Join.name"}}' id='idValName'>
+		<input type="text" class="form-control" placeholder='{{msg . "Join.name"}}' id='idValName' name='name'>
 		
 		<div class="request-flag">
 			<span class="glyphicon glyphicon-question-sign" id='idFlagName'></span>
@@ -35,7 +37,7 @@
 	</div>
 
 	<div class="form-group table" id='idViewEmail'>
-		<input type="text" class="form-control" placeholder='{{msg . "Join.email"}}' id='idValEmail'>
+		<input type="text" class="form-control" placeholder='{{msg . "Join.email"}}' id='idValEmail' name='email'>
 		<div class="request-flag">
 			<span class="glyphicon glyphicon-question-sign" id='idFlagEmail'></span>
 		</div>
@@ -45,6 +47,8 @@
 		<div class="request-flag">
 			<span class="glyphicon glyphicon-question-sign" id='idFlagPwd'></span>
 		</div>
+
+		<input style="display: none;" type="text" class="form-control" id='idValPwdGo' name='pwd'>
 	</div>
 	<div class="form-group">
 		<button type="submit" class="btn btn-primary">{{msg . "Join.go"}}</button>
