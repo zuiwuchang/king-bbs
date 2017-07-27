@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -38,11 +39,31 @@ type User struct {
 	//是否是超級管理員
 	Root bool
 
-	//用戶狀態 狀態-到期時間 多個狀態以 ; 分隔
-	//不設置時間 一直有效
-	Status uint64
+	//用戶狀態 狀態
+	Status uint
+
+	//禁用到期時間
+	Disable time.Time
+
+	//禁言到期時間
+	NoSpeak time.Time
 
 	//角色 id-到期時間 多 ; 分隔
 	//不設置時間 一直有效
 	Role string
+}
+
+func (u *User) UpdateSession(session map[string]string) {
+	session["User"] = "1"
+	session["User_Id"] = fmt.Sprint(u.Id)
+	session["User_Name"] = u.Name
+	session["User_Email"] = u.Email
+	session["User_Face"] = u.Face
+	if u.Root {
+		session["User_Root"] = "1"
+	} else {
+		session["User_Root"] = "0"
+	}
+	session["User_Status"] = fmt.Sprint(u.Status)
+	session["User_Role"] = u.Role
 }

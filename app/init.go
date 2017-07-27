@@ -2,7 +2,9 @@ package app
 
 import (
 	"github.com/revel/revel"
+	"king-bbs/app/controllers"
 	"king-bbs/app/modules/db/manipulator"
+	"king-bbs/app/modules/intercepts"
 )
 
 func init() {
@@ -37,6 +39,10 @@ func init() {
 		manipulator.Initialize()
 	})
 	// revel.OnAppStart(FillCache)
+
+	/*	註冊 攔截器	*/
+	//檢查 session 過期 需要對所有頁面 註冊
+	revel.InterceptFunc(intercepts.CheckNoLogin, revel.BEFORE, &controllers.NoLogin{})
 }
 
 // TODO turn this into revel.HeaderFilter

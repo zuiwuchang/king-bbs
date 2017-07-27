@@ -16,3 +16,11 @@ func (c App) Index() revel.Result {
 func (c App) About() revel.Result {
 	return c.Render()
 }
+
+//登出
+func (c App) Logout() revel.Result {
+	for key, _ := range c.Session {
+		delete(c.Session, key)
+	}
+	return c.Redirect(App.Index)
+}

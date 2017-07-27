@@ -25,12 +25,12 @@
 		return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(str);
 	};
 
-	//密碼至少要8個字符
+	//必須是8~64個字符
 	ctx.MatchPwd = ctx.MatchPwd || function(str){
 		if(typeof(str) != "string"){
 			return false;
 		}
-		return str.length > 7;
+		return str.length > 7 && str.length < 65;
 	};
 
 })(this);

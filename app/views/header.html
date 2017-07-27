@@ -75,18 +75,21 @@ body{
 
 		
 		<ul class="nav navbar-nav navbar-right">
-		{{if .User}}
+		{{if .session.User}}
+			{{if eq .session.User_Root "1" }}
+			<li><a href="#">{{msg . "Root.Title"}}</a></li>
+			{{end}}
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">king <span class="caret"></span></a>
 				<ul class="dropdown-menu">
 					<li><a href="#">設置</a></li>
 					<li><a href="#">消息</a></li>
 					<li role="separator" class="divider"></li>
-					<li><a href="#">登出</a></li>
+					<li><a href="/App/Logout">登出</a></li>
 				</ul>
 			</li>
 		{{else}}
-			<li><a href="/NoLogin/Login">登入</a></li>
+			<li><a id="IdALogin" href="#">{{msg . "Login.Title"}}</a></li>
 			<li><a href="/NoLogin/Join">{{msg . "Join.title"}}</a></li>
 		{{end}}
 		</ul>
@@ -94,3 +97,26 @@ body{
 	</div><!-- /.navbar-collapse -->
 </nav>
 </div><!-- /.container-fluid -->
+
+<script type="text/javascript">
+$(document).ready(function() {
+{{if .session.User}}
+
+{{else}}
+	$("#IdALogin").click(function(){
+		var url = location.href;
+		var name = location.hostname;
+		var find = url.indexOf(name);
+		url = url.substring(find + name.length);
+		find = url.indexOf('/');
+		if(find == -1){
+			find = url.indexOf('\\');
+		}
+		url = url.substring(find);
+		
+		window.location = '/NoLogin/Login?url=' + url;
+		return false;
+	})
+{{end}}
+});
+</script>

@@ -1,36 +1,82 @@
-{{set . "title" "登入"}}
+{{set . "title" (msg . "Login.Title")}}
 {{template "header.html" .}}
+
+{{if .flash.error}}
+<link rel="stylesheet" type="text/css" href="/public/js/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+<script type="text/javascript" src="/public/js/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+{{end}}
+
+<link rel="stylesheet" type="text/css" href="/public/js/kui/popover.css">
+<script type="text/javascript" src="/public/js/kui/popover.js"></script>
+
+<script type="text/javascript" src="/public/js/CryptoJS v3.1.2/rollups/sha512.js"></script>
+
+<style type="text/css">
+.table{
+	display: table;
+	position: relative;
+}
+</style>
 
 <div class="container-fluid">
 <div class="row">
 <div class="col-md-offset-4  col-md-4">
-<form class="form">
-	<div class="form-group">
-		<input type="text" class="form-control" id="inputEmail" placeholder="用戶名/郵箱">
+<form class="form" action="/NoLogin/DoLogin" method="post">
+	<div class="form-group table" id="idViewName">
+		<input type="text" class="form-control" id="idValName" placeholder='{{msg . "Login.name"}}' name="name" value="{{.flash.name}}">
+	</div>
+	<div class="form-group table" id="idViewPwd">
+		<input type="password" class="form-control" id="idValPwd" placeholder='{{msg . "Login.pwd"}}' name="pwd">
 	</div>
 	<div class="form-group">
-		<input type="text" class="form-control" id="inputEmail" placeholder="密碼">
-	</div>
-	<div class="form-group">
-		<button type="submit" class="btn btn-primary">登入</button>
+		<button type="submit" class="btn btn-primary">{{msg . "Login.go"}}</button>
 		&nbsp;&nbsp;&nbsp;
-		<a href="#">忘記密碼?</a>
+		<a href="#">{{msg . "Login.forget?"}}</a>
 	</div>
 
 </form>
+
+{{if .flash.error}}
+<div style="display: none;">
+<div id="dialog-message" title='{{msg . "Login.modalTitle"}}'>
+	<p>
+		{{.flash.error}}
+	</p>
+</div>
+</div>
+{{end}}
+
 </div>
 </div>
 </div>
 {{template "footer.html" .}}
 
+
+{{if .DevMode}}
+	<script type="text/javascript" src="/public/views/util.js"></script>
+
+	<script type="text/javascript" src="/public/views/NoLogin/Login.js"></script>
+{{else}}
+	<script type="text/javascript" src="/public/views/util.min.js"></script>
+
+	<script type="text/javascript" src="/public/views/NoLogin/Login.min.js"></script>
+{{end}}
+
 <script type="text/javascript">
 $(document).ready(function() {
-	$(function () {
-		$('[data-toggle="popover"]').popover()
-	});
-	$("form").submit(function(event) {
-		$('#msgNew').popover('toggle').focus();
-		return false;
+	NewPageContent({
+		lange:{
+			"Sure":'{{msg . "Sure"}}',
+
+			"name":'{{msg . "Login.name"}}',
+			"nameAsk":'{{msg . "Login.nameAsk"}}',
+
+			"pwd":'{{msg . "Login.pwdTitle"}}',
+			"pwdAsk":'{{msg . "Login.pwdAsk"}}',
+		},
+{{if .flash.error}}
+		emsg:true,
+{{end}}
 	});
 });
 </script>
