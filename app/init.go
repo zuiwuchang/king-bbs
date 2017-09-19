@@ -41,8 +41,13 @@ func init() {
 	// revel.OnAppStart(FillCache)
 
 	/*	註冊 攔截器	*/
-	//檢查 session 過期 需要對所有頁面 註冊
+	//檢查 是否 沒有登入 使頁面只能被未登入用戶訪問
 	revel.InterceptFunc(intercepts.CheckNoLogin, revel.BEFORE, &controllers.NoLogin{})
+
+	//檢查 是否 已經登入 使頁面只能被登入用戶訪問
+
+	//檢查 頁面 只能被 root 訪問
+	revel.InterceptFunc(intercepts.CheckRoot, revel.BEFORE, &controllers.Root{})
 }
 
 // TODO turn this into revel.HeaderFilter

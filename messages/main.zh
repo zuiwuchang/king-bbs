@@ -1,9 +1,11 @@
 Title=Cerberus
 Sure=確認
 Cancel=取消
+Home=首頁
 
 #	error
 error.net=網絡異常
+error.permission denied=沒有訪問權限
 
 #	header
 header.Welcome to community=歡迎來到 Cerberus 社區
@@ -23,6 +25,20 @@ about.Text=cerberus it's an idea 這是cerberus創始人illusive man的原話。
 
 ###	Root	###
 Root.Title=管理
+Root.Items=項目
+
+Root.Index=bbs管理
+Root.About=關於
+
+Root.Configure=配置
+Root.Source=資源
+Root.Role=角色
+Root.User=用戶
+Root.Plate=板塊
+Root.Group=類別
+
+
+
 
 ###	NoLogin	###
 #	Join	#
