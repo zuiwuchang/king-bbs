@@ -4,13 +4,11 @@
 
 <div class="container-fluid">
 <div class="row">
-	<div class="col-sm-12">{{msg . "Root.Source"}}</div>
+	<div class="col-sm-12">
+		<p><a href="/Root/Imgs">{{msg . "Public.Imgs"}}</a></p>
+		<p><a href="/Root/Video">{{msg . "Public.Video"}}</a></p>
+		<p><a href="/Root/Binary">{{msg . "Public.Binary"}}</a></p>
+	</div>
 </div>
 </div><!--	/container-fluid	-->
 {{template "footer.html" .}}
-
-<script type="text/javascript">
-$(document).ready(function() {
-	
-});
-</script>

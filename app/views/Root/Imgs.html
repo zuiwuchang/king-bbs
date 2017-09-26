@@ -1,0 +1,150 @@
+{{set . "title" (msg . "Public.Imgs")}}
+{{template "root-header.html" .}}
+
+<style type="text/css">
+.mydiv{
+	margin-top: 7px;
+}
+.myview{
+	margin-top: -12px;
+}
+.div-title{
+	text-align: center;
+	font-size: 18px;
+	margin-top: 3px;
+}
+
+@media screen and (min-width:768px) {
+	.div-add{
+		text-align: center;
+	}
+}
+.my-btn{
+	cursor: pointer;
+}
+</style>
+
+<div class="container-fluid myview">
+
+
+<div class="row">
+	
+	<div class="col-sm-2 mydiv">
+		<div class="div-title">{{msg . "Public.Imgs"}}</div>
+	</div>
+
+	<div class="col-sm-8 mydiv">
+<div class="input-group div-search">
+	<span class="input-group-btn">
+	<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+	</span>
+	<input type="text" class="form-control" placeholder="搜索資源">
+</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-sm-2 mydiv div-add">
+
+<div class="btn-group">
+	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	新增
+	</button>
+
+	<ul class="dropdown-menu">
+	<li><a class="my-btn" id="idANewFolder">檔案夾</a></li>
+	<li role="separator" class="divider"></li>
+	<li><a class="my-btn" id="idANewFile">檔案</a></li>
+	</ul>
+</div>
+	</div>
+	<div class="col-sm-8 mydiv">
+<ol class="breadcrumb">
+	<li><a href="#">Home</a></li>
+	<li><a href="#">Library</a></li>
+	<li class="active"><a href="#">Data</a></li>
+</ol>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-2"></div>
+<div class="col-md-8 mydiv">
+	<table class="table">
+		<tr>
+			<th>
+				名稱<span class="glyphicon glyphicon-arrow-down"></span>
+			</th>
+			<th>
+				上傳時間
+			</th>
+			<th>
+				檔案大小
+			</th>
+		</tr>
+		<tr>
+			<td><span class="glyphicon glyphicon-hdd"></span> 檔案夾</td><td>1911-10-10</td><td>50kb</td>
+		</tr>
+		<tr>
+			<td><span class="glyphicon glyphicon-hdd"></span> 檔案夾</td><td>1911-10-10</td><td>50kb</td>
+		</tr>
+		<tr>
+			<td><span class="glyphicon glyphicon-hdd"></span> 檔案夾</td><td>1911-10-10</td><td>50kb</td>
+		</tr>
+		
+		<tr>
+			<td><span class="glyphicon glyphicon-picture"></span> 圖像</td><td>1911-10-10</td><td>50kb</td>
+		</tr>
+		<tr>
+			<td><span class="glyphicon glyphicon-picture"></span> 圖像</td><td>1911-10-10</td><td>50kb</td>
+		</tr>
+		<tr>
+			<td><span class="glyphicon glyphicon-picture"></span> 圖像</td><td>1911-10-10</td><td>50kb</td>
+		</tr>
+	</table>
+</div>
+</div>
+
+<div id="idView">
+	{{.id}}	
+</div>
+
+</div><!--	/container-fluid	-->
+{{template "footer.html" .}}
+
+{{if .DevMode}}
+	<script type="text/javascript" src="/public/views/Root/Imgs.js"></script>
+{{else}}
+	<script type="text/javascript" src="/public/views/Root/Imgs.min.js"></script>
+{{end}}
+
+<script type="text/javascript">
+$(document).ready(function() {
+	/*
+	$("#idANewFolder").click(function(){
+		var state = 1;
+		window.history.pushState(state, null, "/Root/Imgs/" + state);
+		$("#idView").text(state);
+	});
+	$("#idANewFile").click(function(){
+		var state = 2;
+		window.history.pushState(state, null, "/Root/Imgs/" + state);
+		$("#idView").text(state);
+	});
+	window.addEventListener("popstate", function(e) {
+		//state 爲 pushState 傳入的 第一個參數
+		var state = e.state;
+		if(!state){//state 不存在 則url 不是通過 pushState 無需處理
+			return;
+		}
+
+		//更新 ajax 內容
+		$("#idView").text(state);
+	});
+	*/
+	NewPageContent({
+
+	});
+});
+</script>

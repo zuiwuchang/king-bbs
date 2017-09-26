@@ -83,6 +83,7 @@ func Initialize() {
 			panic(err)
 		}
 	}
+	initTable(&data.Source{})
 }
 func initTable(bean interface{}) {
 	engine := GetEngine()

@@ -3,6 +3,11 @@ Sure=確認
 Cancel=取消
 Home=首頁
 
+#public
+Public.Imgs=公共圖像
+Public.Video=公共視頻
+Public.Binary=公共檔案
+
 #	error
 error.net=網絡異常
 error.permission denied=沒有訪問權限
