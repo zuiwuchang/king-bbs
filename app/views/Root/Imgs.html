@@ -114,6 +114,15 @@
 {{template "footer.html" .}}
 
 {{if .DevMode}}
+	<script type="text/javascript" src="/public/js/king-js/core.min.js"></script>
+{{else}}
+	<script type="text/javascript" src="/public/js/king-js/core.nolog.min.js"></script>
+{{end}}
+
+	<script type="text/javascript" src="/public/js/kui/msg.js"></script>
+	<script type="text/javascript" src="/public/js/king-js/strings/strings.min.js"></script>
+	
+{{if .DevMode}}
 	<script type="text/javascript" src="/public/views/Root/Imgs.js"></script>
 {{else}}
 	<script type="text/javascript" src="/public/views/Root/Imgs.min.js"></script>
@@ -144,7 +153,20 @@ $(document).ready(function() {
 	});
 	*/
 	NewPageContent({
+		//翻譯
+		Lange:{
+			"e.title":'{{msg . "error.title"}}',
+			"e.net":'{{msg . "error.net"}}',
 
+			"Sure":'{{msg . "Sure"}}',
+			"Cancel":'{{msg . "Cancel"}}',
+			
+			"NewFloder":'{{msg . "Root.NewFloder"}}',
+			"NewFloderName":'{{msg . "Root.NewFloderName"}}',
+
+		},
+		//當前 位置
+		Id:'{{.id}}',
 	});
 });
 </script>

@@ -84,6 +84,7 @@ func Initialize() {
 		}
 	}
 	initTable(&data.Source{})
+	initTable(&data.Imgs{})
 }
 func initTable(bean interface{}) {
 	engine := GetEngine()

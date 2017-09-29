@@ -9,6 +9,7 @@ Public.Video=公共視頻
 Public.Binary=公共檔案
 
 #	error
+error.title=錯誤
 error.net=網絡異常
 error.permission denied=沒有訪問權限
 
@@ -42,6 +43,9 @@ Root.User=用戶
 Root.Plate=板塊
 Root.Group=類別
 
+Root.NewFloder=新建檔案夾
+Root.NewFloderName=新檔案夾
+Root.E.Floder.Empty=檔案夾名稱不能爲空
 
 
 

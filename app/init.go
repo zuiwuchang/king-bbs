@@ -17,7 +17,7 @@ func init() {
 		revel.SessionFilter,           // Restore and write the session cookie.
 		revel.FlashFilter,             // Restore and write the flash cookie.
 		revel.ValidationFilter,        // Restore kept validation errors and save new ones from cookie.
-		revel.I18nFilter,              // Resolve the requested language
+		//revel.I18nFilter,              // Resolve the requested language
 		func(c *revel.Controller, fc []revel.Filter) {
 			//驗證語言是否被支持
 			if c.Request.Locale != "zh" {

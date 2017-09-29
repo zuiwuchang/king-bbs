@@ -1,6 +1,7 @@
 package data
 
 const (
+	SourceFolder = 0
 	SourceImg    = 1
 	SourceVideo  = 2
 	SourceBinary = 3

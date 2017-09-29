@@ -3,6 +3,8 @@ package controllers
 import (
 	"github.com/revel/revel"
 	"king-bbs/app/modules/ajax"
+	"king-bbs/app/modules/db/manipulator"
+	"strings"
 )
 
 //僅 root 可訪問 服務器管理
@@ -60,11 +62,20 @@ func (c Root) NewImgsFolder(pid int64, name string) revel.Result {
 	//當前檔案夾 id
 	var result ajax.ResultBase
 
-	if name == "no" {
-		result.Emsg = "test create no"
-		result.Code = 1
+	name = strings.TrimSpace(name)
+	if name == "" {
+		result.Code = ajax.ErrorParams
+		result.Emsg = c.Message("Root.E.Floder.Empty")
+		return c.RenderJSON(&result)
+	}
+
+	var m manipulator.Imgs
+	id, e := m.NewFolder(pid, name)
+	if e == nil {
+		result.Val = id
 	} else {
-		result.Val = 1
+		result.Code = ajax.ErrorDb
+		result.Emsg = e.Error()
 	}
 
 	return c.RenderJSON(&result)
