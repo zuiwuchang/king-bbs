@@ -17,15 +17,17 @@ func init() {
 		revel.SessionFilter,           // Restore and write the session cookie.
 		revel.FlashFilter,             // Restore and write the flash cookie.
 		revel.ValidationFilter,        // Restore kept validation errors and save new ones from cookie.
+		revel.I18nFilter,              // Resolve the requested language
 		func(c *revel.Controller, fc []revel.Filter) {
-			//替換默認的 i18n 解析
-			locale := "zh"
-			c.Request.Locale = locale
-			c.RenderArgs[revel.CurrentLocaleRenderArg] = locale
-
+			//驗證語言是否被支持
+			if c.Request.Locale != "zh" {
+				//替換爲支持的 語言
+				locale := "zh"
+				c.Request.Locale = locale
+				c.ViewArgs[revel.CurrentLocaleViewArg] = locale
+			}
 			fc[0](c, fc[1:])
 		},
-		//revel.I18nFilter,        // Resolve the requested language
 		HeaderFilter,            // Add some security based headers
 		revel.InterceptorFilter, // Run interceptors around the action.
 		revel.CompressFilter,    // Compress the result.

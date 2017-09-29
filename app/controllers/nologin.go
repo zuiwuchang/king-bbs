@@ -37,13 +37,13 @@ func (c NoLogin) CheckUser(val string) revel.Result {
 	if e != nil {
 		rs.Code = ajax.ErrorDb
 		rs.Emsg = e.Error()
-		return c.RenderJson(rs)
+		return c.RenderJSON(rs)
 	}
 
 	if has {
 		rs.Val = ajax.True
 	}
-	return c.RenderJson(rs)
+	return c.RenderJSON(rs)
 }
 
 //驗證郵箱是否重複
@@ -55,13 +55,13 @@ func (c NoLogin) CheckEmail(val string) revel.Result {
 	if e != nil {
 		rs.Code = ajax.ErrorDb
 		rs.Emsg = e.Error()
-		return c.RenderJson(rs)
+		return c.RenderJSON(rs)
 	}
 
 	if has {
 		rs.Val = ajax.True
 	}
-	return c.RenderJson(rs)
+	return c.RenderJSON(rs)
 }
 
 //註冊新 用戶

@@ -67,7 +67,7 @@ func (c Root) NewImgsFolder(pid int64, name string) revel.Result {
 		result.Val = 1
 	}
 
-	return c.RenderJson(&result)
+	return c.RenderJSON(&result)
 }
 
 //公共視頻
