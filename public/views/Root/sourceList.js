@@ -55,6 +55,10 @@
             jq.after(newJq);
            
             //綁定 事件
+            newJq.on('contextmenu',function(event){
+                alert(event.ctrlKey)
+                return false;
+            });
             newJq.click(function (event) {
                 alert(1)
                 /*
