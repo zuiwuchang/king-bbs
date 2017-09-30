@@ -100,4 +100,9 @@ function NewPageContent(params) {
 		//初始化 原始節點
 		list.Insert(params.Items);
 	})();
+
+	//爲手機 創建工具欄
+	if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) { 
+		alert("phone");
+	}
 }

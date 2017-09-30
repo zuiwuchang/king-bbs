@@ -17,10 +17,12 @@
 
         //元素 數組
         var _items = [];
-        
+        //shift 選擇
+        var _shift = -1;
+
         //排序 比較函數
         var compare = function (l, r) {
-            if(l.Style != r.Style){
+            if (l.Style != r.Style) {
                 return l.Style < r.Style;
             }
 
@@ -44,6 +46,126 @@
             }
             return "glyphicon glyphicon-alert"
         };
+        //選擇 項目
+        var selectNormal = function (pos) {
+            _shift = pos;
+
+            for (var i = 0; i < _items.length; ++i) {
+                if (i == pos) {
+                    _items[i].Check = true;
+                } else {
+                    _items[i].Check = false;
+                }
+            }
+
+            _jq.find(".my-list-item").each(function (i, ctx) {
+                var jq = $(ctx);
+                if (i == pos) {
+                    jq.addClass('success');
+                } else {
+                    jq.removeClass('success');
+                }
+            });
+        };
+        var selectCtrl = function (pos) {
+            if (_shift == -1) {
+                _shift = pos;
+            }
+
+            var item = _items[pos];
+
+            var jq = _jq.find("#idMyList" + item.Id);
+            if (item.Check) {
+                item.Check = false;
+                jq.removeClass('success');
+            } else {
+                item.Check = true;
+                jq.addClass('success');
+            }
+        };
+        var selectShift = function (pos) {
+            if (_shift == -1) {
+                selectNormal(pos);
+                return;
+            }
+
+            var min = 0;
+            var max = 0;
+            if(_shift < pos){
+                min = _shift;
+                max = pos;
+            }else{
+                min = pos;
+                max = _shift;
+            }
+            
+            for (var i = 0; i < _items.length; ++i) {
+                if (i <= max && i >= min) {
+                    _items[i].Check = true;
+                } else {
+                    _items[i].Check = false;
+                }
+            }
+
+            _jq.find(".my-list-item").each(function (i, ctx) {
+                var jq = $(ctx);
+                if (i <= max && i >= min) {
+                    jq.addClass('success');
+                } else {
+                    jq.removeClass('success');
+                }
+            });
+        };
+        //爲項目 綁定 事件
+        var bindItemEvent = function (jq, item) {
+            jq.on('contextmenu', function (event) {
+                var find = -1;
+                for (var i = 0; i < _items.length; ++i) {
+                    if (item.Id == _items[i].Id) {
+                        find = i;
+                        break;
+                    }
+                }
+                if (find == -1) {
+                    console.error("item not found");
+                    return false;
+                }
+
+                if (event.ctrlKey) {
+                    selectCtrl(find);
+                } else if (event.shiftKey) {
+                    selectShift(find);
+                } else {
+                    selectNormal(find);
+                }
+
+                //顯示 菜單
+                return false;
+            }).on('dblclick', function () {
+                //進入 目錄
+                console.log("dc");
+            }).on('click', function (event) {
+                var find = -1;
+                for (var i = 0; i < _items.length; ++i) {
+                    if (item.Id == _items[i].Id) {
+                        find = i;
+                        break;
+                    }
+                }
+                if (find == -1) {
+                    console.error("item not found");
+                    return;
+                }
+
+                if (event.ctrlKey) {
+                    selectCtrl(find);
+                } else if (event.shiftKey) {
+                    selectShift(find);
+                } else {
+                    selectNormal(find);
+                }
+            });
+        };
         //插入視圖
         var insertViewItem = function (jq, item) {
             var html = "<tr id='idMyList" + item.Id + "' class='my-list-item'><td>" +
@@ -53,58 +175,14 @@
             var newJq = $(html);
 
             jq.after(newJq);
-           
-            //綁定 事件
-            newJq.on('contextmenu',function(event){
-                alert(event.ctrlKey)
-                return false;
-            });
-            newJq.click(function (event) {
-                alert(1)
-                /*
-                if (event.ctrlKey) {
-                    if (item.Check) {
-                        item.Check = false;
-                        newJq.removeClass('success');
-                    }else{
-                        item.Check = true;
-                        newJq.addClass('success');
-                    }
-                } else if (event.shiftKey) {
 
-                } else {
-                    for (var i = 0; i < _files.length; ++i) {
-                        if(_files[i].Id == item.Id){
-                            _files[i].Check = true;
-                        }else{
-                            _files[i].Check = false;
-                        }
-                    }
-                    for (var i = 0; i < _folders.length; ++i) {
-                        if(_folders[i].Id == item.Id){
-                            _folders[i].Check = true;
-                        }else{
-                            _folders[i].Check = false;
-                        }
-                    }
-                    _jq.find(".my-list-item").each(function (i, ctx) {
-                        var jq = $(ctx);
-                        var id = jq.attr('id');
-                        
-                        if (id == "idMyList" + item.Id) {
-                            jq.addClass('success');
-                        } else {
-                            jq.removeClass('success');
-                        }
-                    });
-                }
-                */
-            });
+            //綁定 事件
+            bindItemEvent(newJq, item);
         };
         //插入節點
         var insert = function (item) {
             var arrs = _items;
-            
+
             //新增 節點
             arrs.push(item);
 
