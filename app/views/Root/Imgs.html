@@ -165,9 +165,9 @@ $(document).ready(function() {
 {
 	Id:{{.Id}},
 	Style:{{.Style}},
-	Size:{{.Size}},
+	Size:'{{sizeString .Size}}',
 	Name:'{{.Name}}',
-	Create:{{.Create}},
+	Create:'{{dateTimeString .Create}}',
 },
 {{end}}
 		],

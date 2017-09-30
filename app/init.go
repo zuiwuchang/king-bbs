@@ -1,13 +1,71 @@
 package app
 
 import (
+	"fmt"
 	"github.com/revel/revel"
 	"king-bbs/app/controllers"
 	"king-bbs/app/modules/db/manipulator"
 	"king-bbs/app/modules/intercepts"
+	"time"
+)
+
+const (
+	KB = 1024
+	MB = 1024 * 1024
+	GB = 1024 * 1024 * 1024
 )
 
 func init() {
+	/***	註冊自定義 模板函數	***/
+	//格式化 時間 顯示 字符串
+	revel.TemplateFuncs["dateString"] = func(t time.Time) string {
+		if t.IsZero() {
+			return ""
+		}
+		return t.Format("2006-01-02")
+	}
+	revel.TemplateFuncs["timeString"] = func(t time.Time) string {
+		if t.IsZero() {
+			return ""
+		}
+		return t.Format("15:04:05")
+	}
+	revel.TemplateFuncs["dateTimeString"] = func(t time.Time) string {
+		if t.IsZero() {
+			return ""
+		}
+		return t.Format("2006-01-02 15:04:05")
+	}
+	//格式化 檔案大小 顯示 字符串
+	revel.TemplateFuncs["sizeString"] = func(size int64) string {
+		if size == 0 {
+			return "-"
+		}
+		if size >= GB {
+			gb := size / GB
+			mod := int(float64(size%GB) / GB * 100)
+			if mod > 0 {
+				return fmt.Sprintf("%v.%02v gb", gb, mod)
+			}
+			return fmt.Sprint(gb, " gb")
+		} else if size >= MB {
+			mb := size / MB
+			mod := int(float64(size%MB) / MB * 100)
+			if mod > 0 {
+				return fmt.Sprintf("%v.%02v mb", mb, mod)
+			}
+			return fmt.Sprint(mb, " mb ", mod)
+		} else if size >= KB {
+			kb := size / KB
+			mod := int(float64(size%KB) / KB * 100)
+			if mod > 0 {
+				return fmt.Sprintf("%v.%02v kb", kb, mod)
+			}
+			return fmt.Sprint(kb, " kb")
+		}
+		return fmt.Sprint(size, " b")
+	}
+
 	// Filters is the default set of global filters.
 	revel.Filters = []revel.Filter{
 		revel.PanicFilter,             // Recover from panics and display an error page instead.

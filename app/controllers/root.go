@@ -63,7 +63,11 @@ func (c Root) Imgs(id int64) revel.Result {
 	}
 
 	if beans != nil {
-		beans = append(beans, data.Imgs{Id: 100, Style: data.SourceImg, Name: "檔案測試"})
+		beans = append(beans, data.Imgs{Id: 100, Style: data.SourceImg, Name: "檔案測試", Size: 1000})
+		beans = append(beans, data.Imgs{Id: 100, Style: data.SourceImg, Name: "檔案測試1024", Size: 1024})
+		beans = append(beans, data.Imgs{Id: 100, Style: data.SourceImg, Name: "檔案測試2", Size: 100000})
+		beans = append(beans, data.Imgs{Id: 100, Style: data.SourceImg, Name: "檔案測試3", Size: 10000000})
+		beans = append(beans, data.Imgs{Id: 100, Style: data.SourceImg, Name: "檔案測試1G", Size: 1024 * 1024 * 1024})
 	}
 	return c.Render(id, beans)
 }
