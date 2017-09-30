@@ -95,7 +95,7 @@ function NewPageContent(params) {
 	//檔案 列表視圖
 	(function(){
 		var list = my.NewSourceList({
-			Jq:$("#idViewList"),
+			Selector:"#idViewList",
 		});
 		//初始化 原始節點
 		list.Insert(params.Items);

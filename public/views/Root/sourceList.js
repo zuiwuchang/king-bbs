@@ -10,7 +10,18 @@
         var SourceBinary = 3;
 
         //保存 初始參數
-        var _jq = obj.Jq;
+        var _jq = $(obj.Selector);
+        $.contextMenu({
+            selector: obj.Selector, 
+            callback: function(key, options) {
+                alert(key);
+            },
+            items: {
+            "edit": {name: "Edit", icon: "edit"},
+            "sep1": "---------",
+            "quit": {name: "Quit", icon: "quit"},
+            }
+        });
 
         //是否使用 升序
         var _asc = true;
@@ -140,7 +151,7 @@
                 }
 
                 //顯示 菜單
-                return false;
+                return true;
             }).on('dblclick', function () {
                 //進入 目錄
                 console.log("dc");
