@@ -22,6 +22,10 @@
 .my-btn{
 	cursor: pointer;
 }
+
+.my-list-item{
+	cursor: pointer;
+}
 </style>
 
 <div class="container-fluid myview">
@@ -71,8 +75,9 @@
 <div class="row">
 	<div class="col-md-2"></div>
 <div class="col-md-8 mydiv">
-	<table class="table">
-		<tr>
+
+	<table class="table" id="idViewList">
+		<tr class="my-list-header">
 			<th>
 				名稱<span class="glyphicon glyphicon-arrow-down"></span>
 			</th>
@@ -82,25 +87,6 @@
 			<th>
 				檔案大小
 			</th>
-		</tr>
-		<tr>
-			<td><span class="glyphicon glyphicon-hdd"></span> 檔案夾</td><td>1911-10-10</td><td>50kb</td>
-		</tr>
-		<tr>
-			<td><span class="glyphicon glyphicon-hdd"></span> 檔案夾</td><td>1911-10-10</td><td>50kb</td>
-		</tr>
-		<tr>
-			<td><span class="glyphicon glyphicon-hdd"></span> 檔案夾</td><td>1911-10-10</td><td>50kb</td>
-		</tr>
-		
-		<tr>
-			<td><span class="glyphicon glyphicon-picture"></span> 圖像</td><td>1911-10-10</td><td>50kb</td>
-		</tr>
-		<tr>
-			<td><span class="glyphicon glyphicon-picture"></span> 圖像</td><td>1911-10-10</td><td>50kb</td>
-		</tr>
-		<tr>
-			<td><span class="glyphicon glyphicon-picture"></span> 圖像</td><td>1911-10-10</td><td>50kb</td>
 		</tr>
 	</table>
 </div>
@@ -123,8 +109,14 @@
 	<script type="text/javascript" src="/public/js/king-js/strings/strings.min.js"></script>
 	
 {{if .DevMode}}
+	<script type="text/javascript" src="/public/views/Root/sourceList.js"></script>
+	<link rel="stylesheet" type="text/css" href="/public/views/Root/sourceList.css">
+
 	<script type="text/javascript" src="/public/views/Root/Imgs.js"></script>
 {{else}}
+	<script type="text/javascript" src="/public/views/Root/sourceList.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/public/views/Root/sourceList.css">
+	
 	<script type="text/javascript" src="/public/views/Root/Imgs.min.js"></script>
 {{end}}
 
@@ -167,6 +159,18 @@ $(document).ready(function() {
 		},
 		//當前 位置
 		Id:'{{.id}}',
+		//初始節點
+		Items:[
+{{range .beans}}
+{
+	Id:{{.Id}},
+	Style:{{.Style}},
+	Size:{{.Size}},
+	Name:'{{.Name}}',
+	Create:{{.Create}},
+},
+{{end}}
+		],
 	});
 });
 </script>

@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/revel/revel"
 	"king-bbs/app/modules/ajax"
+	"king-bbs/app/modules/db/data"
 	"king-bbs/app/modules/db/manipulator"
 	"strings"
 )
@@ -55,8 +56,16 @@ func (c Root) Group() revel.Result {
 //公共圖像
 func (c Root) Imgs(id int64) revel.Result {
 	//當前檔案夾 id
+	var m manipulator.Imgs
+	beans, e := m.FindByPid(id)
+	if e != nil {
+		return c.RenderError(e)
+	}
 
-	return c.Render(id)
+	if beans != nil {
+		beans = append(beans, data.Imgs{Id: 100, Style: data.SourceImg, Name: "檔案測試"})
+	}
+	return c.Render(id, beans)
 }
 func (c Root) NewImgsFolder(pid int64, name string) revel.Result {
 	//當前檔案夾 id
