@@ -23,9 +23,6 @@
 	cursor: pointer;
 }
 
-.my-list-item{
-	cursor: pointer;
-}
 </style>
 
 <div class="container-fluid myview">
@@ -75,17 +72,16 @@
 <div class="row">
 	<div class="col-md-2"></div>
 <div class="col-md-8 mydiv">
-
 	<table class="table" id="idViewList">
 		<tr class="my-list-header">
 			<th>
-				名稱<span class="glyphicon glyphicon-arrow-down"></span>
+				<div id="idBtnSort" class="my-btn">{{msg . "Root.Source.Name"}}<span id="idViewBtnSort" class="glyphicon glyphicon-arrow-down"></span></div>
 			</th>
-			<th>
-				上傳時間
+			<th class="my-list-col-create">
+				{{msg . "Root.Source.Created"}}
 			</th>
-			<th>
-				檔案大小
+			<th class="my-list-col-size">
+				{{msg . "Root.Source.Size"}}
 			</th>
 		</tr>
 	</table>
@@ -160,6 +156,13 @@ $(document).ready(function() {
 			
 			"NewFloder":'{{msg . "Root.NewFloder"}}',
 			"NewFloderName":'{{msg . "Root.NewFloderName"}}',
+
+			"Rename":'{{msg . "Root.Rename"}}',
+			"RenameNumber":'{{msg . "Root.RenameNumber"}}',
+			"RenameAZ":'{{msg . "Root.RenameAZ"}}',
+
+			"Remove":'{{msg . "Root.Remove"}}',
+			"Move":'{{msg . "Root.Move"}}',
 
 		},
 		//當前 位置

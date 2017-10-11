@@ -96,9 +96,57 @@ function NewPageContent(params) {
 	(function(){
 		var list = my.NewSourceList({
 			Selector:"#idViewList",
+			Lange:Lange,
+			Btns:{
+                "Rename": {name: Lange["Rename"], icon: "edit"},
+                "RenameNumber": {name: Lange["RenameNumber"], icon: "edit"},
+                "RenameAZ": {name: Lange["RenameAZ"], icon: "edit"},
+                "sep0": "---------",
+                "Move": {name: Lange["Move"], icon: "cut"},
+                "sep1": "---------",
+                "Remove": {name: Lange["Remove"], icon: "quit"},
+			},
+			Callback:function(key){
+				//返回選中節點
+				var items = this.GetSelects();
+				if(!items){
+					return;
+				}
+
+				if(key == "Rename"){
+					for(var i=0;i<items.length;++i){
+						items[i].Name = "N_" + items[i].Name; 
+					}
+					this.Rename(items);
+				}else if(key == "RenameNumber"){
+					for(var i=0;i<items.length;++i){
+						items[i].Name = "09_" + items[i].Name; 
+					}
+					this.Rename(items);
+				}else if(key == "RenameAZ"){
+					for(var i=0;i<items.length;++i){
+						items[i].Name = "AZ_" + items[i].Name; 
+					}
+					this.Rename(items);
+				}else if(key == "Move"){
+					alert("Move")
+				}else if(key == "Remove"){
+					this.Remove(items);
+				}
+			},
 		});
 		//初始化 原始節點
-		list.Insert(params.Items);
+		list.Init(params.Items);
+
+		//排序按鈕
+		var jqBtnView = $("#idViewBtnSort");
+		$("#idBtnSort").click(function(){
+			if(list.SortToggle()){
+				jqBtnView.removeClass('glyphicon-arrow-up').addClass('glyphicon-arrow-down');
+			}else{
+				jqBtnView.removeClass('glyphicon-arrow-down').addClass('glyphicon-arrow-up');
+			}
+		});
 	})();
 
 	//爲手機 創建工具欄

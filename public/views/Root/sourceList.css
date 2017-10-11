@@ -5,6 +5,8 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
+    cursor: pointer;
 }
 .my-list-header{
     -webkit-touch-callout: none;
@@ -13,4 +15,10 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+.my-list-col-create{
+    min-width: 150px;
+}
+.my-list-col-size{
+    min-width: 100px;
 }
