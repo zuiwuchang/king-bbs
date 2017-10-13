@@ -24,3 +24,11 @@ type ResultBase struct {
 	//當發生錯誤時 返回 錯誤描述 字符串
 	Emsg string
 }
+
+type ResultCreateNewFile struct {
+	ResultBase
+	//已經存在的 分塊大小
+	Ids []int64
+	//服務器要求的 分塊 大小
+	BlockSize int
+}

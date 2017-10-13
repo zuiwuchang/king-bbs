@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/revel/revel"
 	"king-bbs/app/modules/ajax"
 	"king-bbs/app/modules/db/data"
@@ -106,4 +107,49 @@ func (c Root) Binarys(id int64) revel.Result {
 	//當前檔案夾 id
 
 	return c.Render(id)
+}
+
+//上傳 檔案
+func (c Root) NewFile(style, name string, file []byte) revel.Result {
+	fmt.Println(style)
+	fmt.Println(name)
+	fmt.Println(len(file))
+	return c.RenderText("ok")
+}
+
+//創建一個 分塊上傳檔案
+func (c Root) CreateNewFile(hash, name string, style int, pid int64) revel.Result {
+	var result ajax.ResultCreateNewFile
+	hash = strings.TrimSpace(hash)
+	name = strings.TrimSpace(name)
+	if hash == "" {
+		result.Code = ajax.ErrorParams
+		result.Emsg = c.Message("Root.E.Hash.Empty")
+		return c.RenderJSON(&result)
+	}
+	var mSoruce manipulator.Source
+	var source data.Source = data.Source{Hash: hash}
+	has, e := mSoruce.Get(&source)
+	if e != nil {
+		result.Code = ajax.ErrorDb
+		result.Emsg = e.Error()
+		return c.RenderJSON(&result)
+	} else if has {
+		//直接 複製
+
+	} else {
+		//創建 上傳 檔案
+		if id, ids, e := mSoruce.NewFile(hash, name, style); e != nil {
+			result.Code = ajax.ErrorDb
+			result.Emsg = e.Error()
+			return c.RenderJSON(&result)
+		} else {
+			//返回
+			result.Val = id
+			result.Ids = ids
+			result.BlockSize = manipulator.GetBlockSize()
+			return c.RenderJSON(&result)
+		}
+	}
+	return c.RenderJSON(&result)
 }

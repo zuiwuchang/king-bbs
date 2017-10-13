@@ -11,6 +11,12 @@ import (
 )
 
 var g_engine *xorm.Engine
+var g_blockSize int
+
+const (
+	MinBlockSize     = 1024 * 1024
+	DefaultBlockSize = 1024 * 1024 * 5
+)
 
 func Initialize() {
 	//get configure
@@ -21,6 +27,11 @@ func Initialize() {
 	source, _ := revel.Config.String("database.source")
 	if source == "" {
 		panic("database.source not configure at app.conf")
+	}
+	//
+	g_blockSize, _ = revel.Config.Int("database.block.size")
+	if g_blockSize < MinBlockSize {
+		g_blockSize = DefaultBlockSize
 	}
 
 	//create engine
@@ -84,6 +95,7 @@ func Initialize() {
 		}
 	}
 	initTable(&data.Source{})
+	initTable(&data.SourceBlock{})
 	initTable(&data.Imgs{})
 }
 func initTable(bean interface{}) {
@@ -109,4 +121,7 @@ func GetEngine() *xorm.Engine {
 }
 func NewSession() *xorm.Session {
 	return g_engine.NewSession()
+}
+func GetBlockSize() int {
+	return g_blockSize
 }

@@ -98,13 +98,13 @@ function NewPageContent(params) {
 			Selector:"#idViewList",
 			Lange:Lange,
 			Btns:{
-                "Rename": {name: Lange["Rename"], icon: "edit"},
-                "RenameNumber": {name: Lange["RenameNumber"], icon: "edit"},
-                "RenameAZ": {name: Lange["RenameAZ"], icon: "edit"},
-                "sep0": "---------",
-                "Move": {name: Lange["Move"], icon: "cut"},
-                "sep1": "---------",
-                "Remove": {name: Lange["Remove"], icon: "quit"},
+				"Rename": {name: Lange["Rename"], icon: "edit"},
+				"RenameNumber": {name: Lange["RenameNumber"], icon: "edit"},
+				"RenameAZ": {name: Lange["RenameAZ"], icon: "edit"},
+				"sep0": "---------",
+				"Move": {name: Lange["Move"], icon: "cut"},
+				"sep1": "---------",
+				"Remove": {name: Lange["Remove"], icon: "quit"},
 			},
 			Callback:function(key){
 				//返回選中節點
@@ -149,6 +149,70 @@ function NewPageContent(params) {
 		});
 	})();
 
+	//檔案上傳
+	var _uploader = null;
+	(function(){
+		//創建上傳 窗口
+		var jq = $("#idDialogUpload");
+		jq.dialog({
+			//autoOpen: false,
+			closeOnEscape:true,
+			closeText:Lange["Hide"],
+			show: {
+				effect: "bounce",
+				duration: 1000
+			},
+			hide: {
+				effect: "fade",
+				duration: 500
+			},
+			width:400,
+		});
+		$("#idANewFile").on( "click", function() {
+			jq.dialog( "open" );
+		});
+
+		//初始化上傳 組件
+		var uploader = my.NewUpload({
+			//拖放
+			JqView:$("#idViewUpload"),
+			Dnd:"#idDialogUpload",
+			//服務器地址
+			Server:"/Root/NewFile/Imgs",
+			//同時允許最多上傳檔案 數量
+			Works:3,
+
+			//當前檔案夾
+			Pid:Id,
+
+			//檔案類型
+			Style:1,
+
+			//允許上傳的檔案 類型
+			Accept: {
+				title: 'Images',
+				extensions: 'gif,jpg,jpeg,bmp,png,iso,mp4',
+				mimeTypes: 'image/*'
+			},
+		});
+		_uploader = uploader;
+
+		var inputFiles = $("#idInputFiles");
+		inputFiles.on("change",function(e){
+			//增加檔案 到上傳列表
+			var files = this.files;
+			for(var i=0;i<files.length;++i){
+				uploader.Insert(files[i]);
+			}
+			//重置檔案選擇
+			$(this).val(null);
+		});
+		$("#idBtnFiles").on("click",function(){
+			inputFiles.click();
+		});
+		var btnUpload = $("#idBtnUpload");
+
+	})();
 	//爲手機 創建工具欄
 	if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) { 
 		alert("phone");

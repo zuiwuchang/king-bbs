@@ -5,6 +5,9 @@ const (
 	SourceImg    = 1
 	SourceVideo  = 2
 	SourceBinary = 3
+
+	//上傳 完畢
+	SourceStatusOk = 1
 )
 
 //服務器上保存的資源 圖像 檔案 視頻
@@ -20,4 +23,15 @@ type Source struct {
 
 	//檔案大小
 	Size int64
+
+	//檔案上傳狀態
+	Status int `xorm:"index"`
+}
+
+//資源 已上傳的 分塊
+type SourceBlock struct {
+	//所屬資源id
+	Sid int64 `xorm:"index"`
+	//塊索引
+	Chunk int
 }
