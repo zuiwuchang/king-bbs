@@ -8,6 +8,9 @@ const (
 	//執行成功
 	Ok = 0
 
+	//創建資源成功
+	NewOk = -1000
+
 	//數據庫 返回錯誤
 	ErrorDb = 100
 	//無效的參數
@@ -27,8 +30,8 @@ type ResultBase struct {
 
 type ResultCreateNewFile struct {
 	ResultBase
-	//已經存在的 分塊大小
-	Ids []int64
+	//已經存在的 分塊索引
+	Chunks []int
 	//服務器要求的 分塊 大小
-	BlockSize int
+	ChunkSize int
 }

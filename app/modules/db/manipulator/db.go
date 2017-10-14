@@ -6,16 +6,20 @@ import (
 	"github.com/revel/revel"
 	"king-bbs/app/modules/crypto"
 	"king-bbs/app/modules/db/data"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
 
 var g_engine *xorm.Engine
 var g_blockSize int
+var g_fileRoot string
 
 const (
 	MinBlockSize     = 1024 * 1024
 	DefaultBlockSize = 1024 * 1024 * 5
+	DefaultFileRoot  = "source"
 )
 
 func Initialize() {
@@ -33,6 +37,16 @@ func Initialize() {
 	if g_blockSize < MinBlockSize {
 		g_blockSize = DefaultBlockSize
 	}
+	//
+	g_fileRoot, _ = revel.Config.String("file.root")
+	g_fileRoot = strings.TrimSpace(g_fileRoot)
+	if g_fileRoot == "" {
+		g_fileRoot = DefaultFileRoot
+	}
+	if !filepath.IsAbs(g_fileRoot) {
+		g_fileRoot = revel.BasePath + "/" + g_fileRoot
+	}
+	os.MkdirAll(g_fileRoot, 0755)
 
 	//create engine
 	var err error
@@ -124,4 +138,7 @@ func NewSession() *xorm.Session {
 }
 func GetBlockSize() int {
 	return g_blockSize
+}
+func GetFileRoot() string {
+	return g_fileRoot
 }

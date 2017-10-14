@@ -178,7 +178,7 @@ function NewPageContent(params) {
 			JqView:$("#idViewUpload"),
 			Dnd:"#idDialogUpload",
 			//服務器地址
-			Server:"/Root/NewFile/Imgs",
+			Server:"/Root/NewFileChunk",
 			//同時允許最多上傳檔案 數量
 			Works:3,
 

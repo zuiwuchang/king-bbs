@@ -34,4 +34,6 @@ type SourceBlock struct {
 	Sid int64 `xorm:"index"`
 	//塊索引
 	Chunk int
+	//分塊數據
+	Data []byte
 }

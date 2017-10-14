@@ -47,3 +47,19 @@ func (m Imgs) FindByPid(pid int64) ([]data.Imgs, error) {
 	}
 	return rows, nil
 }
+
+//從 source 中 創建一個資源 副本
+func (m Imgs) Clone(src *data.Source, pid int64 /*父檔案夾 id*/, name string /*名稱*/) (int64, error) {
+	var img data.Imgs = data.Imgs{
+		Style: data.SourceImg,
+		Sid:   src.Id,
+		Size:  src.Size,
+		Name:  name,
+		Pid:   pid,
+	}
+	_, e := GetEngine().InsertOne(&img)
+	if e != nil {
+		return 0, e
+	}
+	return img.Id, nil
+}

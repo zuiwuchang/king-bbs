@@ -12,10 +12,14 @@
 		var STATUS_UPLOAD		= 2;	//等待上傳
 		var STATUS_UPLOAD_BEGIN	= 3;	//開始上傳
 		var STATUS_UPLOADING	= 4;	//上傳中
-		var STATUS_OK		= 5;	//上傳完成
-		var STATUS_PAUSE		= 6;	//暫停中
-		var STATUS_ERROR		= 7;	//上傳錯誤
+		var STATUS_CLONE		= 5;	//通知服務器創建副本
+		var STATUS_OK		= 6;	//上傳完成
+		var STATUS_PAUSE		= 7;	//暫停中
+		var STATUS_ERROR		= 8;	//上傳錯誤
 		var STATUS_REMOVE		= 100;	//已移除
+		
+		//分塊大小
+		var CHUNK_SIZE = 1024 * 1024 * 5;
 		
 
 		//保存 參數
@@ -28,16 +32,25 @@
 		//hook WebUploader
 		WebUploader.Uploader.register(
 			{
-				'before-send-file':'beforeSendFile',
 				'before-send':'beforeSend',
 			},
 			{
-				beforeSendFile:function(file){
-					//alert(file);
-				},
-				beforeSend: function(files) 
+				beforeSend: function(chunk) 
 				{
-					//console.log(files);
+					var deferred = WebUploader.Base.Deferred();
+					var i = chunk.chunk;
+					var id = chunk.file.id;
+					var item = _items[id];
+
+					item.SetChunks(chunk.chunks)
+
+					//驗證 分塊 是否已經上傳
+					if(item.ChunkOk()){
+						deferred.reject();//跳過 分塊 上傳
+					}else{
+						deferred.resolve();
+					}
+					return deferred.promise();
 				}
 			}
 		);
@@ -61,7 +74,7 @@
 			//pick: '#idUploader',
 
 			//不需要壓縮 jpeg 後再上傳
-			resize: false,
+			compress: false,
 		
 			//上傳檔案類型
 			accept:obj.Accept,
@@ -69,10 +82,10 @@
 			//使用分片上傳
 			chunked:true,
 			//分片大小
-			//chunkSize:1024 * 1024 * 5,
-			chunkSize:1024 * 10,
+			chunkSize:CHUNK_SIZE,
+			//分塊上傳 出錯 可重試次數
+			chunkRetry:2,
 
-			pick: '#picker'
 		});
 
 		//存儲所有 檔案
@@ -137,6 +150,12 @@
 			//檔案hash
 			var _hash = "";
 			var pid = _pid;
+			//已經上傳 分塊記錄
+			var _chunks = {};
+			//設置分塊數量
+			var _sumChunk = -1;
+			//檔案 服務器 id
+			var _id = 0;
 
 			//設置節點 工作狀態
 			var _run = false;
@@ -175,8 +194,20 @@
 					_status = STATUS_NONE;
 					break;
 				case STATUS_UPLOADING://暫停上傳
+					//更新圖標
+					jqStatus.attr("class","my-btn glyphicon glyphicon-upload");
+					//更新狀態
+					_status = STATUS_PAUSE;
+
+					_uploader.stop(file);
 					break;
 				case STATUS_PAUSE: //繼續上傳
+					//更新圖標
+					jqStatus.attr("class","my-btn glyphicon glyphicon-ban-circle");
+					//更新狀態
+					_status = STATUS_UPLOADING;
+
+					_uploader.upload(file);
 					break;
 				}
 			});
@@ -213,7 +244,7 @@
 					//更新狀態
 					jqStatus.attr("class","my-btn glyphicon glyphicon-ban-circle");
 					_status = STATUS_UPLOAD_BEGIN;
-
+					var ctx = this;
 					//向服務器 請求創建一個檔案
 					$.ajax({
 						url: '/Root/CreateNewFile',
@@ -230,23 +261,65 @@
 							pid:pid,
 						},
 					})
-					.done(function() {
-						console.log("success");
+					.done(function(result) {
+						if(result.Code == -1000){
+							//創建 成功
+							var id = result.Val; //資源id
+
+							//更新 ui
+							jqStatus.attr("class","my-btn glyphicon glyphicon-ok-circle");
+							jqBar.addClass('progress-bar-success');
+							ctx.UpdateBar(1);
+							_status = STATUS_OK;
+							return;
+						}else if(result.Code){
+							ctx.SetError();
+							console.error(result.Emsg);
+							return;
+						}
+						//驗證分塊大小
+						if(CHUNK_SIZE != result.ChunkSize){
+							ctx.SetError();
+							console.error("ChunkSize not match");
+							return;
+						}
+
+						//創建 已上傳 記錄
+						_chunks = {};
+						var chunks = result.Chunks;
+						if(chunks){
+							for (var i = 0; i < chunks.length; i++) {
+								var id = chunks[i];
+								_chunks[id] = true;
+							}
+						}
+						//記錄 檔案 id;
+						_id = result.Val;
+
+						//開始上傳 檔案
+						_uploader.upload(file);
 					})
 					.fail(function() {
-						console.log("error");
-					})
-					.always(function() {
-						console.log("complete");
+						ctx.SetError();
+						console.error("/Root/CreateNewFile net error");
 					});
-					
+				},
+				//上傳 成功
+				SetOk:function(){
+					//通知服務器 複製資源
+					_status = STATUS_CLONE;
 
-					//_uploader.upload(file);
+					return;
+					//更新 ui
+					jqStatus.attr("class","my-btn glyphicon glyphicon-ok-circle");
+					jqBar.addClass('progress-bar-success');
+					_status = STATUS_OK;
 				},
 				//上傳出錯
 				SetError:function(){
 					jqStatus.attr("class","my-btn glyphicon glyphicon-remove-circle");
-					_status = STATUS_ERROR
+					jqBar.addClass('progress-bar-danger');
+					_status = STATUS_ERROR;
 				},
 				//設置工作狀態
 				SetWork:function(run){
@@ -264,6 +337,24 @@
 				//返回檔案 hash
 				Hash:function(){
 					return _hash;
+				},
+				//設置 分塊數量
+				SetChunks:function(val){
+					if(_sumChunk != -1){
+						_sumChunk = val;
+					}
+				},
+				//返回 分塊 是否已經 上傳
+				ChunkOk:function(i){
+					return _chunks[i];
+				},
+				//設置 分塊 已經 上傳
+				SetChunk:function(i){
+					_chunks[i] = true;
+				},
+				//返回 檔案 服務器 id
+				GetId:function(){
+					return _id;
 				},
 			};
 
@@ -330,6 +421,10 @@
 
 			//更新狀態
 			item.SetUploading();
+		}).on('uploadSuccess',function(file){//檔案上傳 成功
+			var item = _items[file.id];
+			item.SetWork(false);
+			item.SetOk();
 		}).on('uploadError',function(file,reason){//檔案上傳 出錯
 			var item = _items[file.id];
 			item.SetWork(false);
@@ -337,6 +432,11 @@
 		}).on('uploadProgress',function(file,percentage){//檔案上傳中 更新進度
 			var item = _items[file.id];
 			item.UpdateBar(percentage);
+		}).on( 'uploadBeforeSend', function(block, data) {//修改上傳 參數
+			var item = _items[block.file.id];
+
+			//增加 上傳 參數
+			data.sid = item.GetId();
 		});
 
 		var insert = function(file){

@@ -14,7 +14,6 @@ GET	/public/*filepath		Static.Serve("public")
 
 
 # Catch all
-*	/:controller/:action		:controller.:action
+*	/:controller/:action			:controller.:action
 
-GET	/Root/Imgs/:id			Root.Imgs
-*	/Root/NewFile/:style		Root.NewFile
+GET	/Root/Imgs/:id				Root.Imgs

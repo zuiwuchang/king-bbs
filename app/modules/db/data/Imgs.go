@@ -9,6 +9,9 @@ type Imgs struct {
 	//自動生成的 資源標識
 	Id int64
 
+	//資源 id
+	Sid int64 `xorm:"index notnull"`
+
 	//資源類別 (僅作爲參考)
 	Style int `xorm:"index notnull"`
 

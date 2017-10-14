@@ -110,10 +110,20 @@ func (c Root) Binarys(id int64) revel.Result {
 }
 
 //上傳 檔案
-func (c Root) NewFile(style, name string, file []byte) revel.Result {
-	fmt.Println(style)
-	fmt.Println(name)
+func (c Root) NewFileChunk(sid int64 /*資源id*/, file []byte /*二進制數據*/, chunk /*分塊索引*/, chunks /*分塊數量*/ int) revel.Result {
+	var m manipulator.Source
+	//不需要分片的 完整檔案
+	if chunks == 0 {
+		e := m.CreateNewFile(sid, file)
+		if e != nil {
+			return c.RenderError(e)
+		}
+	} else {
+
+	}
+	fmt.Println(sid, chunk, chunks)
 	fmt.Println(len(file))
+
 	return c.RenderText("ok")
 }
 
@@ -135,19 +145,44 @@ func (c Root) CreateNewFile(hash, name string, style int, pid int64) revel.Resul
 		result.Emsg = e.Error()
 		return c.RenderJSON(&result)
 	} else if has {
-		//直接 複製
-
+		//已經存在資源
+		if data.SourceStatusOk == source.Status {
+			//直接 複製
+			if style == data.SourceImg {
+				var mImgs manipulator.Imgs
+				result.Val, e = mImgs.Clone(&source, pid, name)
+				if e != nil {
+					result.Code = ajax.ErrorDb
+					result.Emsg = e.Error()
+					return c.RenderJSON(&result)
+				}
+			}
+			result.Code = ajax.NewOk
+			return c.RenderJSON(&result)
+		} else {
+			//需要上傳 分塊
+			if blocks, e := mSoruce.FindBlocks(source.Id); e != nil {
+				result.Code = ajax.ErrorDb
+				result.Emsg = e.Error()
+				return c.RenderJSON(&result)
+			} else {
+				result.Val = source.Id
+				result.Chunks = blocks
+				result.ChunkSize = manipulator.GetBlockSize()
+				return c.RenderJSON(&result)
+			}
+		}
 	} else {
 		//創建 上傳 檔案
-		if id, ids, e := mSoruce.NewFile(hash, name, style); e != nil {
+		if id, blocks, e := mSoruce.NewFile(hash, name, style); e != nil {
 			result.Code = ajax.ErrorDb
 			result.Emsg = e.Error()
 			return c.RenderJSON(&result)
 		} else {
 			//返回
 			result.Val = id
-			result.Ids = ids
-			result.BlockSize = manipulator.GetBlockSize()
+			result.Chunks = blocks
+			result.ChunkSize = manipulator.GetBlockSize()
 			return c.RenderJSON(&result)
 		}
 	}
