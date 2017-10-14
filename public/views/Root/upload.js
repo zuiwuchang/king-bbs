@@ -42,10 +42,8 @@
 					var id = chunk.file.id;
 					var item = _items[id];
 
-					item.SetChunks(chunk.chunks)
-
 					//驗證 分塊 是否已經上傳
-					if(item.ChunkOk()){
+					if(item.ChunkOk(i)){
 						deferred.reject();//跳過 分塊 上傳
 					}else{
 						deferred.resolve();
@@ -152,8 +150,6 @@
 			var pid = _pid;
 			//已經上傳 分塊記錄
 			var _chunks = {};
-			//設置分塊數量
-			var _sumChunk = -1;
 			//檔案 服務器 id
 			var _id = 0;
 
@@ -337,12 +333,6 @@
 				//返回檔案 hash
 				Hash:function(){
 					return _hash;
-				},
-				//設置 分塊數量
-				SetChunks:function(val){
-					if(_sumChunk != -1){
-						_sumChunk = val;
-					}
 				},
 				//返回 分塊 是否已經 上傳
 				ChunkOk:function(i){

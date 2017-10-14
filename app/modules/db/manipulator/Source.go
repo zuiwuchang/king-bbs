@@ -102,3 +102,8 @@ func (m Source) CreateNewFile(id int64, b []byte) error {
 	_, e = session.Id(id).Update(&bean)
 	return e
 }
+
+//根據分片 創建檔案
+func (m Source) CreateNewFileChunk(id int64, b []byte, chunk, chunks int) error {
+	return nil
+}

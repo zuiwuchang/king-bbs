@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/revel/revel"
 	"king-bbs/app/modules/ajax"
 	"king-bbs/app/modules/db/data"
@@ -112,18 +111,18 @@ func (c Root) Binarys(id int64) revel.Result {
 //上傳 檔案
 func (c Root) NewFileChunk(sid int64 /*資源id*/, file []byte /*二進制數據*/, chunk /*分塊索引*/, chunks /*分塊數量*/ int) revel.Result {
 	var m manipulator.Source
-	//不需要分片的 完整檔案
-	if chunks == 0 {
+	if chunks == 0 { //不需要分片的 完整檔案
 		e := m.CreateNewFile(sid, file)
 		if e != nil {
 			return c.RenderError(e)
 		}
 	} else {
-
+		//需要分片的檔案
+		e := m.CreateNewFileChunk(sid, file, chunk, chunks)
+		if e != nil {
+			return c.RenderError(e)
+		}
 	}
-	fmt.Println(sid, chunk, chunks)
-	fmt.Println(len(file))
-
 	return c.RenderText("ok")
 }
 
