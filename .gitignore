@@ -31,4 +31,4 @@ logs/
 # build min js
 /public/views/*.min.js
 /public/views/*/*.min.js
-
+/files/*

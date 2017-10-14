@@ -38,7 +38,7 @@ func Initialize() {
 		g_blockSize = DefaultBlockSize
 	}
 	//
-	g_fileRoot, _ = revel.Config.String("file.root")
+	g_fileRoot, _ = revel.Config.String("files.root")
 	g_fileRoot = strings.TrimSpace(g_fileRoot)
 	if g_fileRoot == "" {
 		g_fileRoot = DefaultFileRoot
