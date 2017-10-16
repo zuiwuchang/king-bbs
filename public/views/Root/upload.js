@@ -175,7 +175,7 @@
 			}
 
 			//bind
-			jqStatus.on("click",function(){
+			var clickBtnStatus = function(){
 				switch(_status){
 				case STATUS_NONE://設置狀態到 等待上傳
 					//更新圖標
@@ -209,8 +209,12 @@
 					_uploader.upload(file);
 					break;
 				}
-			});
-			jqRemove.on("click",function(){
+			};
+			jqStatus.on("click",clickBtnStatus);
+			var doRemove = function(){
+				//修改狀態
+				_status = STATUS_REMOVE;
+
 				//從 索引中 移除
 				delete _items[file.id];
 
@@ -221,10 +225,31 @@
 
 				//從界面移除
 				jq.remove();
+			};
+			jqRemove.on("click",function(){
+				doRemove();
 			});
 
 			//返回 節點 接口
 			newObj = {
+				ClickUpload:function(){
+					if(_status == STATUS_NONE || _status == STATUS_PAUSE){
+						clickBtnStatus();
+					}
+				},
+				ClickPause:function(){
+					if(_status == STATUS_UPLOAD || _status == STATUS_UPLOADING){
+						clickBtnStatus();
+					}
+				},
+				ClickClear:function(){
+					if(_status == STATUS_HASH ||
+						_status == STATUS_NONE ||
+						_status == STATUS_OK
+						){
+						doRemove();
+					}
+				},
 				//返回 檔案
 				File:function(){
 					return file;
@@ -454,6 +479,9 @@
 
 				item.SetWork(false);
 				return;
+			}else if(item.Status() != STATUS_UPLOAD){
+				item.SetWork(false);
+				return;
 			}
 
 			//更新狀態
@@ -487,6 +515,22 @@
 			//設置父目錄id
 			SetPid:function(val){
 				_pid = val;
+			},
+			//開始上傳 所有 檔案
+			Upload:function(){
+				for (var key in _items) {
+					_items[key].ClickUpload();
+				}
+			},
+			Pause:function(){
+				for (var key in _items) {
+					_items[key].ClickPause();
+				}
+			},
+			Clear:function(){
+				for (var key in _items) {
+					_items[key].ClickClear();
+				}
 			},
 		};
 		return newObj;

@@ -215,11 +215,19 @@ function NewPageContent(params) {
 		$("#idBtnFiles").on("click",function(){
 			inputFiles.click();
 		});
-		var btnUpload = $("#idBtnUpload");
+		$("#idBtnUpload").on("click",function(){
+			uploader.Upload();
+		});
+		$("#idBtnPause").on("click",function(){
+			uploader.Pause();
+		});
+		$("#idBtnClear").on("click",function(){
+			uploader.Clear();
+		});
 
 	})();
 	//更新 上傳 位置
-	_uploader.SetPid(0);
+	//_uploader.SetPid(100);
 	
 	//爲手機 創建工具欄
 	if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) { 
