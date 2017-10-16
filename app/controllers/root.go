@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/revel/revel"
 	"king-bbs/app/modules/ajax"
 	"king-bbs/app/modules/db/data"
@@ -61,14 +62,6 @@ func (c Root) Imgs(id int64) revel.Result {
 	if e != nil {
 		return c.RenderError(e)
 	}
-
-	if beans != nil {
-		beans = append(beans, data.Imgs{Id: 100, Style: data.SourceImg, Name: "檔案測試", Size: 1000})
-		beans = append(beans, data.Imgs{Id: 101, Style: data.SourceImg, Name: "檔案測試1024", Size: 1024})
-		beans = append(beans, data.Imgs{Id: 102, Style: data.SourceImg, Name: "檔案測試2", Size: 100000})
-		beans = append(beans, data.Imgs{Id: 103, Style: data.SourceImg, Name: "檔案測試3", Size: 10000000})
-		beans = append(beans, data.Imgs{Id: 104, Style: data.SourceImg, Name: "檔案測試1G", Size: 1024 * 1024 * 1024})
-	}
 	return c.Render(id, beans)
 }
 func (c Root) NewImgsFolder(pid int64, name string) revel.Result {
@@ -108,7 +101,7 @@ func (c Root) Binarys(id int64) revel.Result {
 	return c.Render(id)
 }
 
-//上傳 檔案
+//上傳 檔案 分塊
 func (c Root) NewFileChunk(sid int64 /*資源id*/, file []byte /*二進制數據*/, chunk /*分塊索引*/, chunks /*分塊數量*/ int) revel.Result {
 	var m manipulator.Source
 	if chunks == 0 { //不需要分片的 完整檔案
@@ -186,4 +179,47 @@ func (c Root) CreateNewFile(hash, name string, style int, pid int64) revel.Resul
 		}
 	}
 	return c.RenderJSON(&result)
+}
+
+//創建一個檔案副本
+func (c Root) CloneNewFile(sid int64, name string, style int, pid int64) revel.Result {
+	var result ajax.ResultBase
+	if sid == 0 {
+		result.Code = ajax.ErrorParams
+		result.Emsg = fmt.Sprintf("sid not found (%v)", sid)
+		return c.RenderJSON(&result)
+	}
+	name = strings.TrimSpace(name)
+
+	//驗證資源 有效
+	var mSoruce manipulator.Source
+	var source data.Source = data.Source{Id: sid}
+	has, e := mSoruce.Get(&source)
+	if e != nil {
+		result.Code = ajax.ErrorDb
+		result.Emsg = e.Error()
+		return c.RenderJSON(&result)
+	} else if !has {
+		result.Code = ajax.False
+		result.Emsg = fmt.Sprintf("sid not found (%v)", sid)
+		return c.RenderJSON(&result)
+	} else if data.SourceStatusOk != source.Status {
+		result.Code = ajax.Fault
+		result.Emsg = fmt.Sprintf("source(%v) wait chunk", sid)
+		return c.RenderJSON(&result)
+	}
+
+	//複製 檔案
+	switch style {
+	case data.SourceImg:
+		var mImgs manipulator.Imgs
+		result.Val, e = mImgs.Clone(&source, pid, name)
+		if e != nil {
+			result.Code = ajax.ErrorDb
+			result.Emsg = e.Error()
+			return c.RenderJSON(&result)
+		}
+	}
+	return c.RenderJSON(&result)
+
 }

@@ -28,6 +28,7 @@
 		var Server = obj.Server;
 		var _pid = obj.Pid;
 		var Style = obj.Style;
+		var onFileOk = obj.OnFileOk;
 
 		//hook WebUploader
 		WebUploader.Uploader.register(
@@ -150,8 +151,10 @@
 			var pid = _pid;
 			//已經上傳 分塊記錄
 			var _chunks = {};
-			//檔案 服務器 id
+			//檔案 服務器 source id
 			var _id = 0;
+			//檔案 大小
+			var _size = file.size;
 
 			//設置節點 工作狀態
 			var _run = false;
@@ -267,6 +270,13 @@
 							jqBar.addClass('progress-bar-success');
 							ctx.UpdateBar(1);
 							_status = STATUS_OK;
+
+							ctx.SetWork(false);
+
+							//通知 回調
+							if(onFileOk){
+								onFileOk(pid,id,name,_size);
+							}
 							return;
 						}else if(result.Code){
 							ctx.SetError();
@@ -304,18 +314,55 @@
 				SetOk:function(){
 					//通知服務器 複製資源
 					_status = STATUS_CLONE;
+					var ctx = this;
+					$.ajax({
+						url: '/Root/CloneNewFile',
+						type: 'POST',
+						dataType: 'json',
+						data: {
+							//檔案 source id
+							sid: _id,
+							//檔案名稱
+							name:name,
+							//檔案類別
+							style:Style,
+							//父目錄id
+							pid:pid,
+						},
+					})
+					.done(function(result) {
+						if(result.Code){
+							ctx.SetError();
+							console.error(result.Emsg);
+							return;
+						}else{
+							//創建 成功
+							var id = result.Val; //資源id
 
-					return;
-					//更新 ui
-					jqStatus.attr("class","my-btn glyphicon glyphicon-ok-circle");
-					jqBar.addClass('progress-bar-success');
-					_status = STATUS_OK;
+							//更新 ui
+							jqStatus.attr("class","my-btn glyphicon glyphicon-ok-circle");
+							jqBar.addClass('progress-bar-success');
+							ctx.UpdateBar(1);
+							_status = STATUS_OK;
+							ctx.SetWork(false);
+							if(onFileOk){
+								onFileOk(pid,id,name,_size);
+							}
+							return;
+						}
+					})
+					.fail(function() {
+						ctx.SetError();
+						console.error("/Root/CloneNewFile net error");
+					});
 				},
 				//上傳出錯
 				SetError:function(){
 					jqStatus.attr("class","my-btn glyphicon glyphicon-remove-circle");
 					jqBar.addClass('progress-bar-danger');
 					_status = STATUS_ERROR;
+
+					setWork(false);
 				},
 				//設置工作狀態
 				SetWork:function(run){
@@ -342,7 +389,7 @@
 				SetChunk:function(i){
 					_chunks[i] = true;
 				},
-				//返回 檔案 服務器 id
+				//返回 檔案 服務器 id (source id)
 				GetId:function(){
 					return _id;
 				},
@@ -413,7 +460,7 @@
 			item.SetUploading();
 		}).on('uploadSuccess',function(file){//檔案上傳 成功
 			var item = _items[file.id];
-			item.SetWork(false);
+
 			item.SetOk();
 		}).on('uploadError',function(file,reason){//檔案上傳 出錯
 			var item = _items[file.id];

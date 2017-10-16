@@ -194,6 +194,11 @@ function NewPageContent(params) {
 				extensions: 'gif,jpg,jpeg,bmp,png,iso,mp4',
 				mimeTypes: 'image/*'
 			},
+
+			//檔案上傳成功
+			OnFileOk:function(pid/*父目錄id*/,id/*檔案 唯一標識*/,name/*檔案名稱*/,size/*檔案大小*/){
+				alert(pid + "\n" + id + "\n" + name + "\n" + size);
+			},
 		});
 		_uploader = uploader;
 
@@ -213,6 +218,9 @@ function NewPageContent(params) {
 		var btnUpload = $("#idBtnUpload");
 
 	})();
+	//更新 上傳 位置
+	_uploader.SetPid(0);
+	
 	//爲手機 創建工具欄
 	if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) { 
 		alert("phone");

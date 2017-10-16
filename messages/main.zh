@@ -64,7 +64,7 @@ Root.Remove=移除
 Root.E.Hash.Empty=檔案hash不能爲空
 #	Source	#
 Root.Source.Name=名稱
-Root.Source.Created=上傳時間
+Root.Source.Created=建立時間
 Root.Source.Size=檔案大小
 Root.Source.UploadTitle=檔案上傳
 

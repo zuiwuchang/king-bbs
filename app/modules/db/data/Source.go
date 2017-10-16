@@ -35,5 +35,5 @@ type SourceBlock struct {
 	//塊索引
 	Chunk int
 	//分塊數據
-	Data []byte
+	Data []byte `xorm:"MEDIUMBLOB"`
 }

@@ -15,6 +15,7 @@ import (
 var g_engine *xorm.Engine
 var g_blockSize int
 var g_fileRoot string
+var g_showSql bool = false
 
 const (
 	MinBlockSize     = 1024 * 1024
@@ -63,6 +64,7 @@ func Initialize() {
 	showsql = strings.ToLower(showsql)
 	if showsql != "" && showsql != "0" && showsql != "false" {
 		g_engine.ShowSQL(true)
+		g_showSql = true
 	}
 
 	//keep live
