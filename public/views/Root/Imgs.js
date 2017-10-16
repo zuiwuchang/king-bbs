@@ -191,7 +191,37 @@ function NewPageContent(params) {
 				}else if(key == "Move"){
 					alert("Move")
 				}else if(key == "Remove"){
-					this.Remove(items);
+					if(waitAction){
+						return;
+					}
+
+					var ids = [];
+
+					for(var i=0;i<items.length;++i){
+						ids.push(items[i].Id)
+					}
+
+					var ctx = this;
+					waitAction = true;
+					$.ajax({
+						url: '/Root/RemoveImgs',
+						type: 'POST',
+						dataType: 'json',
+						data: {ids: ids.join(",")},
+					})
+					.done(function(result) {
+						if(result.Code){
+							console.error(result.Emsg);
+						}else{
+							ctx.Remove(items);
+						}
+					})
+					.fail(function(e) {
+						console.error("net error");
+					})
+					.always(function() {
+						waitAction = false;
+					});
 				}
 			},
 		});
@@ -252,7 +282,7 @@ function NewPageContent(params) {
 			//允許上傳的檔案 類型
 			Accept: {
 				title: 'Images',
-				extensions: 'gif,jpg,jpeg,bmp,png,iso,mp4',
+				extensions: 'gif,jpg,jpeg,bmp,png',
 				mimeTypes: 'image/*'
 			},
 

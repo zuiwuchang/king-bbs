@@ -6,6 +6,7 @@ import (
 	"king-bbs/app/modules/ajax"
 	"king-bbs/app/modules/db/data"
 	"king-bbs/app/modules/db/manipulator"
+	"strconv"
 	"strings"
 )
 
@@ -84,6 +85,30 @@ func (c Root) NewImgsFolder(pid int64, name string) revel.Result {
 		result.Emsg = e.Error()
 	}
 
+	return c.RenderJSON(&result)
+}
+func (c Root) RemoveImgs(ids string) revel.Result {
+	var result ajax.ResultBase
+	ids = strings.TrimSpace(ids)
+	strs := strings.Split(ids, ",")
+	items := make([]int64, 0, len(strs))
+	var id int64
+	for i := 0; i < len(strs); i++ {
+		id, _ = strconv.ParseInt(strs[i], 10, 64)
+		if id != 0 {
+			items = append(items, id)
+		}
+	}
+	if len(items) == 0 {
+		return c.RenderJSON(&result)
+	}
+
+	var m manipulator.Imgs
+	e := m.Remove(items)
+	if e != nil {
+		result.Code = ajax.ErrorDb
+		result.Emsg = e.Error()
+	}
 	return c.RenderJSON(&result)
 }
 

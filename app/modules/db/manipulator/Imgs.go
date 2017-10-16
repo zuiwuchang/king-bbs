@@ -2,7 +2,9 @@ package manipulator
 
 import (
 	"fmt"
+	"github.com/go-xorm/xorm"
 	"king-bbs/app/modules/db/data"
+	"strings"
 )
 
 type Imgs struct {
@@ -107,4 +109,100 @@ func (m Imgs) clone(src *data.Source, pid int64 /*父檔案夾 id*/, name string
 		return 0, e
 	}
 	return img.Id, nil
+}
+
+//刪除 資源
+func (m Imgs) Remove(ids []int64) error {
+	session := NewSession()
+	defer session.Close()
+
+	e := session.Begin()
+	if e != nil {
+		return e
+	}
+	defer func() {
+		if e == nil {
+			session.Commit()
+		} else {
+			session.Rollback()
+		}
+	}()
+	e = m.remove(session, ids)
+	return e
+
+}
+func (m Imgs) remove(session *xorm.Session, ids []int64) error {
+	if len(ids) == 0 {
+		return nil
+	}
+	strs := make([]string, len(ids))
+	for i := 0; i < len(ids); i++ {
+		strs[i] = fmt.Sprint(ids[i])
+	}
+	str := "id in (" + strings.Join(strs, ",") + ")"
+
+	var beans []data.Imgs
+	e := session.Where(str).Find(&beans)
+	if e != nil {
+		return e
+	}
+
+	ids = ids[0:0]
+	strs = strs[0:0]
+	for i := 0; i < len(beans); i++ {
+		if beans[i].Style == data.SourceFolder {
+			//檔案夾
+			ids = append(ids, beans[i].Id)
+		} else {
+			//非檔案夾
+			strs = append(strs, fmt.Sprint(beans[i].Id))
+		}
+	}
+	//刪除 非檔案夾
+	if len(strs) > 0 {
+		str = "id in (" + strings.Join(strs, ",") + ")"
+		_, e = session.Where(str).Delete(&data.Imgs{})
+		if e != nil {
+			return e
+		}
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+
+	return m.removeFolder(session, ids)
+}
+func (m Imgs) removeFolder(session *xorm.Session, ids []int64) error {
+	//刪除 檔案夾
+	strs := make([]string, len(ids))
+	for i := 0; i < len(ids); i++ {
+		strs[i] = fmt.Sprint(ids[i])
+	}
+	str := "id in (" + strings.Join(strs, ",") + ")"
+	_, e := session.Where(str).Delete(&data.Imgs{})
+	if e != nil {
+		return e
+	}
+
+	//刪除 子項目
+	for i := 0; i < len(ids); i++ {
+		var beans []data.Imgs
+		e = session.Where("pid = ?", ids[i]).Find(&beans)
+		if e != nil {
+			return e
+		}
+		if len(beans) < 0 {
+			continue
+		}
+		items := make([]int64, len(beans))
+		for j := 0; j < len(beans); j++ {
+			items[j] = beans[j].Id
+		}
+		//remove
+		e = m.remove(session, items)
+		if e != nil {
+			return e
+		}
+	}
+	return nil
 }
