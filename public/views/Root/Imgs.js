@@ -155,7 +155,7 @@ function NewPageContent(params) {
 		//創建上傳 窗口
 		var jq = $("#idDialogUpload");
 		jq.dialog({
-			//autoOpen: false,
+			autoOpen: false,
 			closeOnEscape:true,
 			closeText:Lange["Hide"],
 			show: {
