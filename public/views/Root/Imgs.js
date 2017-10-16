@@ -6,12 +6,59 @@ function NewPageContent(params) {
 	/***	初始化 參數	***/
 	params = params || {};
 	var Lange = params.Lange || {};
-
 	//當前檔案夾 位置
 	var Id = params.Id;
 
 	//等待操作完成
 	var waitAction = false;
+
+	//返回當前時間
+	var getNowString = function(){
+		return strings.FormatDate(new Date(),"yyyy-MM-dd hh:mm:ss");
+	};
+	//返回 大小 可讀 字符串
+	var getSizeString = function(size){
+		var KB = 1024;
+		var MB = 1024 * 1024;
+		var GB = 1024 * 1024 * 1024;
+
+		if(size == 0){
+			return "-"
+		}
+		if (size >= GB) {
+			var gb = parseInt(size / GB);
+			var mod = parseInt(parseFloat(size%GB) / GB * 100)
+			if (mod > 0) {
+				if(mod < 10){
+					mod = "0" + mod;
+				}
+				return gb + "." + mod + " gb";
+			}
+			return gb + " gb";
+		} else if (size >= MB) {
+			var mb = parseInt(size / MB);
+			var mod = parseInt(parseFloat(size%MB) / MB * 100);
+			if (mod > 0) {
+				if(mod < 10){
+					mod = "0" + mod;
+				}
+				return mb + "." + mod + " mb";
+			}
+			return mb + " mb";
+		} else if (size >= KB) {
+			var kb = parseInt(size / KB);
+			var mod = parseInt(parseFloat(size%KB) / KB * 100);
+			if(mod > 0){
+				if(mod < 10){
+					mod = "0" + mod;
+				}
+				return kb + "." + mod + " kb";
+			}
+			return kb + " kb";
+		}
+		
+		return size + " b";
+	};
 
 	var msgId = 0;
 	//消息對話框
@@ -19,6 +66,8 @@ function NewPageContent(params) {
 		Id: msgId++,
 	});
 
+	//
+	var _list = null;
 
 	//新建檔案夾
 	(function () {
@@ -42,11 +91,12 @@ function NewPageContent(params) {
 						}
 
 						waitAction = true;
+						var pid = Id;
 						$.ajax({
 							url: '/Root/NewImgsFolder',
 							type: 'POST',
 							dataType: 'json',
-							data: { pid: Id, name: val },
+							data: { pid: pid, name: val },
 						}).done(function (result) {
 							if (result.Code) {
 								//失敗
@@ -55,7 +105,17 @@ function NewPageContent(params) {
 									Val: strings.HtmlEncode(result.Emsg),
 								});
 							} else {
-								alert("yes")
+								if(Id == pid){
+									_list.Insert({
+										Id:result.Val,
+										Style:0,
+										Size:"-",
+										Name:val,
+										Create:getNowString(),
+										Status:1,
+									});
+									//alert("yes")
+								}
 							}
 						}).fail(function (e) {
 							if(500 == e.status){
@@ -135,6 +195,7 @@ function NewPageContent(params) {
 				}
 			},
 		});
+		_list = list;
 		//初始化 原始節點
 		list.Init(params.Items);
 
@@ -197,7 +258,17 @@ function NewPageContent(params) {
 
 			//檔案上傳成功
 			OnFileOk:function(pid/*父目錄id*/,id/*檔案 唯一標識*/,name/*檔案名稱*/,size/*檔案大小*/){
-				alert(pid + "\n" + id + "\n" + name + "\n" + size);
+				if(pid != Id){
+					return;
+				}
+				_list.Insert({
+					Id:id,
+					Style:1,
+					Size:getSizeString(size),
+					Name:name,
+					Create:getNowString(),
+					Status:1,
+				});
 			},
 		});
 		_uploader = uploader;

@@ -18,6 +18,21 @@
 		var SourceVideo = 2;
 		var SourceBinary = 3;
 
+		var StatusNone = 0;	
+		var StatusNew = 1;	//新檔案
+		var StatusModify = 2;	//檔案已修改
+
+		var getStatusSpan = function(status){
+			if(status == StatusNew){
+				return "<span class='my-list-status my-new glyphicon glyphicon-info-sign'></span>";
+			}else if(status == StatusModify){
+				return "<span class='my-list-status my-modify glyphicon glyphicon-wrench'></span>";
+			}else{
+				return "<span class='my-list-status my-none glyphicon glyphicon-fire'></span>";
+			}
+			return "";
+		};
+
 		//組件唯一標記
 		var _id = obj.Id || "_0_";
 
@@ -219,6 +234,7 @@
 		//插入視圖
 		var insertViewItem = function (jq, item) {
 			var html = "<tr id='idMyList" + _id + item.Id + "' class='my-list-item'><td>" +
+				getStatusSpan(item.Status) +
 				"<span class='" + getStyleClass(item.Style) + "'></span> <span class='my-list-item-name'>" + item.Name + "</span></td><td class='my-list-col-create'>" +
 				item.Create + "</td><td class='my-list-col-size'>" +
 				item.Size + "</td></tr>";
@@ -232,6 +248,13 @@
 		//插入節點
 		var insert = function (item) {
 			var arrs = _items;
+
+			//驗證唯一
+			for (var i = 0; i < arrs.length; i++) {
+				if(arrs[i].Id == item.Id){//已經存在此節點 直接 忽略插入
+					return;
+				}
+			}
 
 			//新增 節點
 			arrs.push(item);
@@ -275,14 +298,17 @@
 			var arrs = [];
 			for(var i=0;i<_items.length;++i){
 				var item = _items[i];
+				item.Status = StatusNone;
 				if(item.Check){
 					arrs.push("<tr id='idMyList" + _id + item.Id + "' class='my-list-item success'><td>" +
+					getStatusSpan(item.Status) +
 					"<span class='" + getStyleClass(item.Style) + "'></span> <span class='my-list-item-name'>" + item.Name + "</span></td><td class='my-list-col-create'>" +
 					item.Create + "</td><td class='my-list-col-size'>" +
 					item.Size + "</td></tr>");
 				}else{
 					arrs.push("<tr id='idMyList" + _id + item.Id + "' class='my-list-item'><td>" +
-					"<span class='" + getStyleClass(item.Style) + "'></span> <span class='my-list-item-name'>" + item.Name + "<span></td><td class='my-list-col-create'>" +
+					getStatusSpan(item.Status) +
+					"<span class='" + getStyleClass(item.Style) + "'></span> <span class='my-list-item-name'>" + item.Name + "</span></td><td class='my-list-col-create'>" +
 					item.Create + "</td><td class='my-list-col-size'>" +
 					item.Size + "</td></tr>");
 				}
