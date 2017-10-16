@@ -206,3 +206,24 @@ func (m Imgs) removeFolder(session *xorm.Session, ids []int64) error {
 	}
 	return nil
 }
+func (m Imgs) Rename(items []data.SourceRename) error {
+	session := NewSession()
+	defer session.Close()
+
+	e := session.Begin()
+	defer func() {
+		if e == nil {
+			session.Commit()
+		} else {
+			session.Rollback()
+		}
+	}()
+
+	for i := 0; i < len(items); i++ {
+		_, e = session.Id(items[i].Id).Update(&data.Imgs{Name: items[i].Name})
+		if e != nil {
+			return e
+		}
+	}
+	return nil
+}

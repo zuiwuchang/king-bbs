@@ -54,9 +54,9 @@ Root.NewFloder=新建檔案夾
 Root.NewFloderName=新檔案夾
 Root.E.Floder.Empty=檔案夾名稱不能爲空
 
+Root.Open=打開
 Root.Rename=重命名
 Root.RenameNumber=重命名 [0~9]
-Root.RenameAZ=重命名 [A~Z]
 Root.Move=移動
 Root.Remove=移除
 

@@ -37,3 +37,9 @@ type SourceBlock struct {
 	//分塊數據
 	Data []byte `xorm:"MEDIUMBLOB"`
 }
+
+//資源 改名
+type SourceRename struct {
+	Id   int64
+	Name string
+}

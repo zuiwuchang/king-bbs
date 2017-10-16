@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/revel/revel"
 	"king-bbs/app/modules/ajax"
@@ -108,6 +109,26 @@ func (c Root) RemoveImgs(ids string) revel.Result {
 	if e != nil {
 		result.Code = ajax.ErrorDb
 		result.Emsg = e.Error()
+	}
+	return c.RenderJSON(&result)
+}
+func (c Root) RenameImgs(str string) revel.Result {
+	var result ajax.ResultBase
+	var items []data.SourceRename
+	e := json.Unmarshal([]byte(str), &items)
+	if e != nil {
+		result.Code = ajax.Fault
+		result.Emsg = e.Error()
+		return c.RenderJSON(&result)
+	}
+	if len(items) > 0 {
+		var m manipulator.Imgs
+		e = m.Rename(items)
+		if e != nil {
+			result.Code = ajax.Fault
+			result.Emsg = e.Error()
+			return c.RenderJSON(&result)
+		}
 	}
 	return c.RenderJSON(&result)
 }

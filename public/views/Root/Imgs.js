@@ -154,16 +154,104 @@ function NewPageContent(params) {
 
 	//檔案 列表視圖
 	(function(){
+		var getFmtNumberStr = function(n,i){
+			var max = (n - 1).toString();
+			i = i.toString();
+			while(i.length < max.length){
+				i = "0" + i;
+			}
+			return i;
+		};
+		var msgName = kui.NewInputMsg({
+			Id: msgId++,
+			Btns: [
+				{
+					Name: Lange["Sure"],
+					Callback: function (params) {
+						this.Hide();
+
+						if (waitAction) {
+							return;
+						}
+
+						var val = this.GetVal();
+						val = $.trim(val)
+						if (!val) {
+							//alert("need name")
+							return;
+						}
+						var items = params.Items;
+						if(items.length == 1){
+							items[0].Name = val;
+						}else{
+							if(params.Style == 0){
+								for (var i = 0; i < items.length; i++) {
+									items[i].Name = val;
+								}
+							}else if(params.Style == 1){
+								var x = 0;
+								for (var i = 0; i < items.length; i++) {
+									items[i].Name = val + getFmtNumberStr(items.length,x);
+									++x;
+								}
+							}else{
+
+							}
+						}
+
+						waitAction = true;
+						var pid = Id;
+						$.ajax({
+							url: '/Root/RenameImgs',
+							type: 'POST',
+							dataType: 'json',
+							data: { str: JSON.stringify(items)},
+						}).done(function (result) {
+							if (result.Code) {
+								//失敗
+								msgBox.Show({
+									Title: Lange["e.title"],
+									Val: strings.HtmlEncode(result.Emsg),
+								});
+							} else {
+								if(Id == pid){
+									_list.Rename(items)
+								}
+							}
+						}).fail(function (e) {
+							if(500 == e.status){
+								msgBox.Show({
+									Title: Lange["e.title"],
+									Val: strings.HtmlEncode(e.responseJSON.description),
+								});
+							}else{
+								msgBox.Show({
+									Title: Lange["e.title"],
+									Val: Lange["e.net"],
+								});
+							}
+						}).always(function () {
+							waitAction = false;
+						});
+					},
+				},
+				{
+					Name: Lange["Cancel"],
+				},
+			]
+		});
+
 		var list = my.NewSourceList({
 			Selector:"#idViewList",
 			Lange:Lange,
 			Btns:{
+				"Open": {name: Lange["Open"], icon: "add"},
+				"sep0": "---------",
 				"Rename": {name: Lange["Rename"], icon: "edit"},
 				"RenameNumber": {name: Lange["RenameNumber"], icon: "edit"},
-				"RenameAZ": {name: Lange["RenameAZ"], icon: "edit"},
-				"sep0": "---------",
-				"Move": {name: Lange["Move"], icon: "cut"},
 				"sep1": "---------",
+				"Move": {name: Lange["Move"], icon: "cut"},
+				"sep2": "---------",
 				"Remove": {name: Lange["Remove"], icon: "quit"},
 			},
 			Callback:function(key){
@@ -173,21 +261,42 @@ function NewPageContent(params) {
 					return;
 				}
 
-				if(key == "Rename"){
+				if(key == "Open"){
+					alert("open")
+				}else if(key == "Rename"){
+					var name = items[0].Name;
+					var arrs = [];
 					for(var i=0;i<items.length;++i){
-						items[i].Name = "N_" + items[i].Name; 
+						arrs.push({
+							Id:items[i].Id,
+							Name:items[i].Name,
+						});
 					}
-					this.Rename(items);
+					msgName.Show({
+						Title: Lange["Rename"],
+						Val: name,
+						CallParams:{
+							Style:0,
+							Items:arrs,
+						},
+					});
 				}else if(key == "RenameNumber"){
+					var name = items[0].Name;
+					var arrs = [];
 					for(var i=0;i<items.length;++i){
-						items[i].Name = "09_" + items[i].Name; 
+						arrs.push({
+							Id:items[i].Id,
+							Name:items[i].Name,
+						});
 					}
-					this.Rename(items);
-				}else if(key == "RenameAZ"){
-					for(var i=0;i<items.length;++i){
-						items[i].Name = "AZ_" + items[i].Name; 
-					}
-					this.Rename(items);
+					msgName.Show({
+						Title: Lange["RenameNumber"],
+						Val: name,
+						CallParams:{
+							Style:1,
+							Items:arrs,
+						},
+					});
 				}else if(key == "Move"){
 					alert("Move")
 				}else if(key == "Remove"){
@@ -211,13 +320,27 @@ function NewPageContent(params) {
 					})
 					.done(function(result) {
 						if(result.Code){
-							console.error(result.Emsg);
+							//失敗
+							msgBox.Show({
+								Title: Lange["e.title"],
+								Val: strings.HtmlEncode(result.Emsg),
+							});
 						}else{
 							ctx.Remove(items);
 						}
 					})
 					.fail(function(e) {
-						console.error("net error");
+						if(500 == e.status){
+							msgBox.Show({
+								Title: Lange["e.title"],
+								Val: strings.HtmlEncode(e.responseJSON.description),
+							});
+						}else{
+							msgBox.Show({
+								Title: Lange["e.title"],
+								Val: Lange["e.net"],
+							});
+						}
 					})
 					.always(function() {
 						waitAction = false;
