@@ -73,14 +73,25 @@
 		//排序 比較函數
 		var compare = function (l, r) {
 			if (l.Style != r.Style) {
-				return l.Style < r.Style;
+				return l.Style - r.Style;
 			}
 
+			if(l.Name == r.Name){
+				return 0;
+			}
+
+			if(l.Name > r.Name){
+				if (_asc) {
+					return 1;
+				}else{
+					return -1;
+				}
+			}
 			if (_asc) {
-				return l.Name <= r.Name;
+				return -1;
+			}else{
+				return 1;
 			}
-
-			return l.Name >= r.Name;
 		};
 		//返回 類型 圖標
 		var getStyleClass = function (style) {
@@ -271,12 +282,12 @@
 			var i = arrs.length - 1; // 插入 i 之後
 			for (; i > 0; --i) {
 				var node = arrs[i - 1];
-				if (compare(node, item)) {
-					break;
-				} else {
+				if (compare(node, item) > 0) {
 					//swap
 					arrs[i - 1] = item;
 					arrs[i] = node;
+				} else {
+					break;
 				}
 			}
 
@@ -300,7 +311,7 @@
 				_jq.find(".my-list-item").remove();
 			}
 			_items.sort(function(l,r){
-				return !compare(l,r);
+				return compare(l,r);
 			});
 
 			var arrs = [];
