@@ -36,6 +36,8 @@ type ResultBase struct {
 
 type ResultCreateNewFile struct {
 	ResultBase
+	//資源sid
+	Sid int64
 	//已經存在的 分塊索引
 	Chunks []int
 	//服務器要求的 分塊 大小

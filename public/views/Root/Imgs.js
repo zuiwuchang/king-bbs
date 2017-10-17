@@ -68,6 +68,14 @@ function NewPageContent(params) {
 	var msgBox = kui.NewMsg({
 		Id: msgId++,
 	});
+
+	//打開 項目
+	var OpenItems = function(items){
+		for (var i = 0; i < items.length; i++) {
+			var item = items[i];
+			window.open("/Root/Preview/Imgs/" + item.Id);
+		}
+	};
 	
 	//新建檔案夾
 	(function () {
@@ -373,9 +381,13 @@ function NewPageContent(params) {
 							UpdateId(items[i].Id)
 							return;
 						}
+						arrs.push(items[i]);
+					}
+					if(arrs.length < 0 ){
+						return;
 					}
 
-					alert("open");
+					OpenItems(arrs);
 				}else if(key == "Rename"){
 					var name = items[0].Name;
 					var arrs = [];
@@ -523,7 +535,7 @@ function NewPageContent(params) {
 			},
 
 			//檔案上傳成功
-			OnFileOk:function(pid/*父目錄id*/,id/*檔案 唯一標識*/,name/*檔案名稱*/,size/*檔案大小*/){
+			OnFileOk:function(pid/*父目錄id*/,sid/*source id*/,id/*檔案 唯一標識*/,name/*檔案名稱*/,size/*檔案大小*/){
 				if(pid != Id){
 					return;
 				}
@@ -534,6 +546,7 @@ function NewPageContent(params) {
 					Name:name,
 					Create:getNowString(),
 					Status:1,
+					Sid:sid,
 				});
 			},
 		});

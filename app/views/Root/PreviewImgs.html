@@ -1,0 +1,35 @@
+{{set . "title" (msg . "Root.Preview.Imgs")}}
+{{template "root-header.html" .}}
+
+
+<div class="container-fluid">
+
+<div class="row">
+	<p>
+		id = {{.bean.Id}}
+	</p>
+	<p>
+		sid = {{.bean.Sid}}
+	</p>
+	<p>
+		name = {{.bean.Name}}
+	</p>
+	<p>
+		create = {{dateTimeString .bean.Create}}
+	</p>
+	<p>
+		size = {{sizeString .bean.Size}}
+	</p>
+	<p>
+		<img src="/App/Source?id={{.bean.Sid}}" alt="not found">
+	</p>
+</div>
+
+</div><!--	/container-fluid	-->
+{{template "footer.html" .}}
+
+<script type="text/javascript">
+$(document).ready(function() {
+	
+});
+</script>

@@ -74,6 +74,8 @@ Root.Source.Size=檔案大小
 Root.Source.UploadTitle=檔案上傳
 
 
+#	Preview		#
+Root.Preview.Imgs=圖像預覽
 
 ###	NoLogin	###
 #	Join	#

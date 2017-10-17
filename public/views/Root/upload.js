@@ -289,6 +289,7 @@
 						if(result.Code == -1000){
 							//創建 成功
 							var id = result.Val; //資源id
+							var sid = result.Sid; //source id
 
 							//更新 ui
 							jqStatus.attr("class","my-btn glyphicon glyphicon-ok-circle");
@@ -300,7 +301,7 @@
 
 							//通知 回調
 							if(onFileOk){
-								onFileOk(pid,id,name,_size);
+								onFileOk(pid,sid,id,name,_size);
 							}
 							return;
 						}else if(result.Code){
@@ -340,13 +341,14 @@
 					//通知服務器 複製資源
 					_status = STATUS_CLONE;
 					var ctx = this;
+					var sid =_id;
 					$.ajax({
 						url: '/Root/CloneNewFile',
 						type: 'POST',
 						dataType: 'json',
 						data: {
 							//檔案 source id
-							sid: _id,
+							sid: sid,
 							//檔案名稱
 							name:name,
 							//檔案類別
@@ -371,7 +373,7 @@
 							_status = STATUS_OK;
 							ctx.SetWork(false);
 							if(onFileOk){
-								onFileOk(pid,id,name,_size);
+								onFileOk(pid,sid,id,name,_size);
 							}
 							return;
 						}

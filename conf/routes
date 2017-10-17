@@ -17,3 +17,4 @@ GET	/public/*filepath		Static.Serve("public")
 *	/:controller/:action			:controller.:action
 
 GET	/Root/Imgs/:id				Root.Imgs
+GET	/Root/Preview/Imgs/:id			Root.PreviewImgs

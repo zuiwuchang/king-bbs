@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/revel/revel"
 	"king-bbs/app/modules/ajax"
@@ -179,6 +180,20 @@ func (c Root) RenameImgs(str string) revel.Result {
 	}
 	return c.RenderJSON(&result)
 }
+func (c Root) PreviewImgs(id int64) revel.Result {
+	if id == 0 {
+		return c.RenderError(errors.New("id not found (0)"))
+	}
+
+	bean := &data.Imgs{Id: id}
+	var m manipulator.Imgs
+	if has, e := m.Get(bean); e != nil {
+		return c.RenderError(e)
+	} else if !has {
+		return c.RenderError(fmt.Errorf("id not found (%v)", id))
+	}
+	return c.Render(bean)
+}
 
 //公共視頻
 func (c Root) Videos(id int64) revel.Result {
@@ -241,6 +256,7 @@ func (c Root) CreateNewFile(hash, name string, style int, pid int64) revel.Resul
 					result.Emsg = e.Error()
 					return c.RenderJSON(&result)
 				}
+				result.Sid = source.Id
 			}
 			result.Code = ajax.NewOk
 			return c.RenderJSON(&result)

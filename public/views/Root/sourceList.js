@@ -4,10 +4,11 @@
 	var namespace = g.my;
 	/*
 	item = {
-		Id:int64,       //唯一標識
-		Name:string,    //顯示名稱
-		Style:int,      //種族
-		Status:int,     //狀態
+		Id:int64,	//唯一標識
+		Name:string,	//顯示名稱
+		Style:int,	//種族
+		Status:int,	//狀態
+		Sid:int64,	//資源id
 	};
 	*/
 	namespace.NewSourceList = namespace.NewSourceList || function (obj) {
