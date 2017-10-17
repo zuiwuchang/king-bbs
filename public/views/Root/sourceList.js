@@ -377,7 +377,9 @@
 			for(var i=0;i<_items.length;++i){
 				if(_items[i].Id == id){
 					_items[i].Name = name;
-					_jq.find("#idMyList"  + _id + id).find(".my-list-item-name:first").text(name);
+					var jqItem = _jq.find("#idMyList"  + _id + id);
+					jqItem.find(".my-list-item-name:first").text(name);
+					jqItem.find(".my-list-status:first").attr('class', 'my-list-status my-modify glyphicon glyphicon-wrench');
 					return;
 				}
 			}
