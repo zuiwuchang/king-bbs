@@ -1,5 +1,9 @@
 package ajax
 
+import (
+	"king-bbs/app/modules/db/data"
+)
+
 const (
 	//bool
 	True  = 1
@@ -36,4 +40,9 @@ type ResultCreateNewFile struct {
 	Chunks []int
 	//服務器要求的 分塊 大小
 	ChunkSize int
+}
+type ResultFindImgs struct {
+	ResultBase
+	Childs []data.Imgs
+	Paths  []data.Imgs
 }

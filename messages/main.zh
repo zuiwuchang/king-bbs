@@ -62,6 +62,11 @@ Root.Remove=移除
 
 #	Upload	#
 Root.E.Hash.Empty=檔案hash不能爲空
+Root.Upload.Select=選擇檔案
+Root.Upload.Start=開始上傳
+Root.Upload.Pause=暫停上傳
+Root.Upload.Clear=清空檔案
+
 #	Source	#
 Root.Source.Name=名稱
 Root.Source.Created=建立時間

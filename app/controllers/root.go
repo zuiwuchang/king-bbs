@@ -58,13 +58,60 @@ func (c Root) Group() revel.Result {
 
 //公共圖像
 func (c Root) Imgs(id int64) revel.Result {
-	//當前檔案夾 id
 	var m manipulator.Imgs
+	//返回 路徑
+	var paths []data.Imgs
+	if id == 0 {
+		paths = make([]data.Imgs, 1)
+		paths[0] = data.Imgs{Id: 0}
+	} else {
+		var e error
+		paths, e = m.FindPath(id)
+		if e != nil {
+			return c.RenderError(e)
+		}
+		paths = append(paths, data.Imgs{Id: 0})
+	}
+
+	//返回 子項目
 	beans, e := m.FindByPid(id)
 	if e != nil {
 		return c.RenderError(e)
 	}
-	return c.Render(id, beans)
+
+	return c.Render(id, beans, paths)
+}
+func (c Root) FindImgs(id int64) revel.Result {
+	var result ajax.ResultFindImgs
+
+	var m manipulator.Imgs
+	//返回 路徑
+	var paths []data.Imgs
+	if id == 0 {
+		paths = make([]data.Imgs, 1)
+		paths[0] = data.Imgs{Id: 0}
+	} else {
+		var e error
+		paths, e = m.FindPath(id)
+		if e != nil {
+			result.Code = ajax.ErrorDb
+			result.Emsg = e.Error()
+			return c.RenderJSON(&result)
+		}
+		paths = append(paths, data.Imgs{Id: 0})
+	}
+
+	//返回 子項目
+	beans, e := m.FindByPid(id)
+	if e != nil {
+		result.Code = ajax.ErrorDb
+		result.Emsg = e.Error()
+		return c.RenderJSON(&result)
+	}
+
+	result.Childs = beans
+	result.Paths = paths
+	return c.RenderJSON(&result)
 }
 func (c Root) NewImgsFolder(pid int64, name string) revel.Result {
 	//當前檔案夾 id

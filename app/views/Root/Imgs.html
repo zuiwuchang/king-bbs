@@ -64,10 +64,7 @@
 </div>
 	</div>
 	<div class="col-sm-8 mydiv">
-<ol class="breadcrumb">
-	<li><a href="#">Home</a></li>
-	<li><a href="#">Library</a></li>
-	<li class="active"><a href="#">Data</a></li>
+<ol class="breadcrumb" id="idPathList">
 </ol>
 	</div>
 </div>
@@ -91,9 +88,6 @@
 </div>
 </div>
 
-<div id="idView">
-	{{.id}}	
-</div>
 
 <div id="idDialogUpload" title='{{msg . "Root.Source.UploadTitle"}}' style="display:none;">
 	<p>
@@ -103,10 +97,10 @@
 	</p>
 	<p>
 		<input type="file" id="idInputFiles" style="display: none;" multiple="multiple" accept="image/*">
-		<button id="idBtnFiles" class="btn btn-default">選擇檔案</button>
-		<button id="idBtnUpload" class="btn btn-default">開始上傳</button>
-		<button id="idBtnPause" class="btn btn-default">暫停上傳</button>
-		<button id="idBtnClear" class="btn btn-default">清空檔案</button>
+		<button id="idBtnFiles" class="btn btn-default">{{msg . "Root.Upload.Select"}}</button>
+		<button id="idBtnUpload" class="btn btn-default">{{msg . "Root.Upload.Start"}}</button>
+		<button id="idBtnPause" class="btn btn-default">{{msg . "Root.Upload.Pause"}}</button>
+		<button id="idBtnClear" class="btn btn-default">{{msg . "Root.Upload.Clear"}}</button>
 	</p>
 </div>
 
@@ -141,6 +135,8 @@
 	<script type="text/javascript" src="/public/views/Root/upload.js"></script>
 	<link rel="stylesheet" type="text/css" href="/public/views/Root/upload.css">
 
+	<script type="text/javascript" src="/public/views/Root/pathList.js"></script>
+
 	<script type="text/javascript" src="/public/views/Root/Imgs.js"></script>
 {{else}}
 	<script type="text/javascript" src="/public/views/Root/sourceList.min.js"></script>
@@ -149,33 +145,13 @@
 	<script type="text/javascript" src="/public/views/Root/upload.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="/public/views/Root/upload.css">
 	
+	<script type="text/javascript" src="/public/views/Root/pathList.min.js"></script>
+
 	<script type="text/javascript" src="/public/views/Root/Imgs.min.js"></script>
 {{end}}
 
 <script type="text/javascript">
 $(document).ready(function() {
-	/*
-	$("#idANewFolder").click(function(){
-		var state = 1;
-		window.history.pushState(state, null, "/Root/Imgs/" + state);
-		$("#idView").text(state);
-	});
-	$("#idANewFile").click(function(){
-		var state = 2;
-		window.history.pushState(state, null, "/Root/Imgs/" + state);
-		$("#idView").text(state);
-	});
-	window.addEventListener("popstate", function(e) {
-		//state 爲 pushState 傳入的 第一個參數
-		var state = e.state;
-		if(!state){//state 不存在 則url 不是通過 pushState 無需處理
-			return;
-		}
-
-		//更新 ajax 內容
-		$("#idView").text(state);
-	});
-	*/
 	NewPageContent({
 		//翻譯
 		Lange:{
@@ -210,6 +186,14 @@ $(document).ready(function() {
 	Size:'{{sizeString .Size}}',
 	Name:'{{.Name}}',
 	Create:'{{dateTimeString .Create}}',
+},
+{{end}}
+		],
+		Paths:[
+{{range .paths}}
+{
+	Id:{{.Id}},
+	Name:{{.Name}},
 },
 {{end}}
 		],

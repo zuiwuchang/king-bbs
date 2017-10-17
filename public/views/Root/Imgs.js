@@ -16,6 +16,9 @@ function NewPageContent(params) {
 	var getNowString = function(){
 		return strings.FormatDate(new Date(),"yyyy-MM-dd hh:mm:ss");
 	};
+	var getFmtDate = function(d){
+		return strings.FormatDate(new Date(d),"yyyy-MM-dd hh:mm:ss");
+	};
 	//返回 大小 可讀 字符串
 	var getSizeString = function(size){
 		var KB = 1024;
@@ -65,10 +68,7 @@ function NewPageContent(params) {
 	var msgBox = kui.NewMsg({
 		Id: msgId++,
 	});
-
-	//
-	var _list = null;
-
+	
 	//新建檔案夾
 	(function () {
 		var onFolderSure = function(ctx){
@@ -160,7 +160,96 @@ function NewPageContent(params) {
 		});
 	})();
 
+	var UpdateId = function(id,popstate){
+		if (waitAction) {
+			return;
+		}
+		var ctx = _pathList;
+		waitAction = true;
+		$.ajax({
+			url: '/Root/FindImgs',
+			type: 'POST',
+			dataType: 'json',
+			data: {id: id},
+		})
+		.done(function(result) {
+			if (result.Code) {
+				//失敗
+				msgBox.Show({
+					Title: Lange["e.title"],
+					Val: strings.HtmlEncode(result.Emsg),
+				});
+			} else {
+				//更新當前位置
+				if(Id != id){
+					if(!window.history.state && window.history.state != 0){
+						window.history.replaceState(Id, null, "/Root/Imgs/" + Id);
+					}
+					Id = id;
+					ctx.Init(result.Paths);
+
+					//更新 上傳 位置
+					_uploader.SetPid(id);
+
+					//更新地址
+					if(!popstate){
+						window.history.pushState(Id, null, "/Root/Imgs/" + Id);
+					}
+				}
+				//更新列表 或刷新列表
+				var items = result.Childs;
+				if(items){
+					for (var i = 0; i < items.length; i++) {
+						items[i].Size = getSizeString(items[i].Size);
+						items[i].Create = getFmtDate(items[i].Create);
+					}
+				}
+				_list.Init(items);
+			}
+		})
+		.fail(function(e) {
+			if(500 == e.status){
+				msgBox.Show({
+					Title: Lange["e.title"],
+					Val: strings.HtmlEncode(e.responseJSON.description),
+				});
+			}else{
+				msgBox.Show({
+					Title: Lange["e.title"],
+					Val: Lange["e.net"],
+				});
+			}
+		})
+		.always(function() {
+			waitAction = false;
+		});
+	};
+
+	window.addEventListener("popstate", function(e) {
+		//state 爲 pushState 傳入的 第一個參數
+		var id = e.state;
+		if(!window.history.state && window.history.state != 0){
+			return
+		}
+
+		//更新 ajax 內容
+		UpdateId(id,true);
+	});
+	
+	//路徑
+	var _pathList;
+	(function(){
+		_pathList = my.NewPathList({
+			Jq:$("#idPathList"),
+			Items:params.Paths,
+			Callback:function(id){
+				UpdateId(id);
+			},
+		});
+	})();
+
 	//檔案 列表視圖
+	var _list = null;
 	(function(){
 		var getFmtNumberStr = function(n,i){
 			var max = (n - 1).toString();
@@ -192,14 +281,12 @@ function NewPageContent(params) {
 					for (var i = 0; i < items.length; i++) {
 						items[i].Name = val;
 					}
-				}else if(params.Style == 1){
+				}else /*if(params.Style == 1)*/{
 					var x = 0;
 					for (var i = 0; i < items.length; i++) {
 						items[i].Name = val + getFmtNumberStr(items.length,x);
 						++x;
 					}
-				}else{
-
 				}
 			}
 
@@ -280,7 +367,15 @@ function NewPageContent(params) {
 				}
 
 				if(key == "Open"){
-					alert("open")
+					var arrs = [];
+					for (var i = 0; i < items.length; i++) {
+						if(items[i].Style == 0){
+							UpdateId(items[i].Id)
+							return;
+						}
+					}
+
+					alert("open");
 				}else if(key == "Rename"){
 					var name = items[0].Name;
 					var arrs = [];
@@ -468,8 +563,7 @@ function NewPageContent(params) {
 		});
 
 	})();
-	//更新 上傳 位置
-	//_uploader.SetPid(100);
+	
 	
 	//爲手機 創建工具欄
 	if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) { 

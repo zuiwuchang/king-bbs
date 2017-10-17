@@ -203,8 +203,15 @@
 				//顯示 菜單
 				return true;
 			}).on('dblclick', function () {
-				//進入 目錄
-				console.log("dc");
+				if(_callback){
+					_callback("Open");
+					return;
+				}
+				if(!obj.Callback){
+					return;
+				}
+				_callback = obj.Callback.bind(newObj)
+				_callback("Open");
 			}).on('mousedown', function (event) {
 				var find = -1;
 				for (var i = 0; i < _items.length; ++i) {
@@ -387,6 +394,13 @@
 		newObj = {
 			//初始化節點
 			Init:function(items){
+				if(_items.length){
+					_items = [];
+					_jq.find(".my-list-item").remove();
+				}
+				if(!items){
+					return;
+				}
 				if (items instanceof Array) {
 					for (var i = 0; i < items.length; ++i) {
 						_items.push(items[i]);

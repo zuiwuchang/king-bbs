@@ -227,3 +227,26 @@ func (m Imgs) Rename(items []data.SourceRename) error {
 	}
 	return nil
 }
+
+//返回 路徑
+func (m Imgs) FindPath(id int64) ([]data.Imgs, error) {
+	engine := GetEngine()
+	beans := make([]data.Imgs, 0, 10)
+
+	for id != 0 {
+		var bean data.Imgs
+		if has, e := engine.Id(id).Cols("id", "pid", "name").Get(&bean); e != nil {
+			return nil, e
+		} else if !has {
+			return nil, fmt.Errorf("id not found (%v)", id)
+		}
+		if bean.Style != data.SourceFolder {
+			return nil, fmt.Errorf("source not folder (%v)", id)
+		}
+
+		beans = append(beans, bean)
+		id = bean.Pid
+	}
+
+	return beans, nil
+}
