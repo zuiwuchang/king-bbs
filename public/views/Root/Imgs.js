@@ -71,74 +71,82 @@ function NewPageContent(params) {
 
 	//新建檔案夾
 	(function () {
+		var onFolderSure = function(ctx){
+			ctx.Hide();
+
+			if (waitAction) {
+				return;
+			}
+
+			var val = ctx.GetVal();
+			val = $.trim(val)
+			if (!val) {
+				//alert("need name")
+				return;
+			}
+
+			waitAction = true;
+			var pid = Id;
+			$.ajax({
+				url: '/Root/NewImgsFolder',
+				type: 'POST',
+				dataType: 'json',
+				data: { pid: pid, name: val },
+			}).done(function (result) {
+				if (result.Code) {
+					//失敗
+					msgBox.Show({
+						Title: Lange["e.title"],
+						Val: strings.HtmlEncode(result.Emsg),
+					});
+				} else {
+					if(Id == pid){
+						_list.Insert({
+							Id:result.Val,
+							Style:0,
+							Size:"-",
+							Name:val,
+							Create:getNowString(),
+							Status:1,
+						});
+						//alert("yes")
+					}
+				}
+			}).fail(function (e) {
+				if(500 == e.status){
+					msgBox.Show({
+						Title: Lange["e.title"],
+						Val: strings.HtmlEncode(e.responseJSON.description),
+					});
+				}else{
+					msgBox.Show({
+						Title: Lange["e.title"],
+						Val: Lange["e.net"],
+					});
+				}
+			}).always(function () {
+				waitAction = false;
+			});
+		};
 		var msgFolder = kui.NewInputMsg({
 			Id: msgId++,
 			Btns: [
 				{
 					Name: Lange["Sure"],
 					Callback: function () {
-						this.Hide();
-
-						if (waitAction) {
-							return;
-						}
-
-						var val = this.GetVal();
-						val = $.trim(val)
-						if (!val) {
-							//alert("need name")
-							return;
-						}
-
-						waitAction = true;
-						var pid = Id;
-						$.ajax({
-							url: '/Root/NewImgsFolder',
-							type: 'POST',
-							dataType: 'json',
-							data: { pid: pid, name: val },
-						}).done(function (result) {
-							if (result.Code) {
-								//失敗
-								msgBox.Show({
-									Title: Lange["e.title"],
-									Val: strings.HtmlEncode(result.Emsg),
-								});
-							} else {
-								if(Id == pid){
-									_list.Insert({
-										Id:result.Val,
-										Style:0,
-										Size:"-",
-										Name:val,
-										Create:getNowString(),
-										Status:1,
-									});
-									//alert("yes")
-								}
-							}
-						}).fail(function (e) {
-							if(500 == e.status){
-								msgBox.Show({
-									Title: Lange["e.title"],
-									Val: strings.HtmlEncode(e.responseJSON.description),
-								});
-							}else{
-								msgBox.Show({
-									Title: Lange["e.title"],
-									Val: Lange["e.net"],
-								});
-							}
-						}).always(function () {
-							waitAction = false;
-						});
-
+						onFolderSure(this);
 					},
 				},
 				{
 					Name: Lange["Cancel"],
 				},
 			]
+		});
+		msgFolder.Jq().keydown(function(e) {
+			if(e.keyCode != 13){
+				return;
+			}
+			onFolderSure(msgFolder);
 		});
 		$("#idANewFolder").click(function () {
 			if (waitAction) {
@@ -162,83 +170,93 @@ function NewPageContent(params) {
 			}
 			return i;
 		};
+		var onNameSure = function(ctx){
+			ctx.Hide();
+
+			if (waitAction) {
+				return;
+			}
+
+			var val = ctx.GetVal();
+			val = $.trim(val)
+			if (!val) {
+				//alert("need name")
+				return;
+			}
+			var params = ctx.CallParams();
+			var items = params.Items;
+			if(items.length == 1){
+				items[0].Name = val;
+			}else{
+				if(params.Style == 0){
+					for (var i = 0; i < items.length; i++) {
+						items[i].Name = val;
+					}
+				}else if(params.Style == 1){
+					var x = 0;
+					for (var i = 0; i < items.length; i++) {
+						items[i].Name = val + getFmtNumberStr(items.length,x);
+						++x;
+					}
+				}else{
+
+				}
+			}
+
+			waitAction = true;
+			var pid = Id;
+			$.ajax({
+				url: '/Root/RenameImgs',
+				type: 'POST',
+				dataType: 'json',
+				data: { str: JSON.stringify(items)},
+			}).done(function (result) {
+				if (result.Code) {
+					//失敗
+					msgBox.Show({
+						Title: Lange["e.title"],
+						Val: strings.HtmlEncode(result.Emsg),
+					});
+				} else {
+					if(Id == pid){
+						_list.Rename(items)
+					}
+				}
+			}).fail(function (e) {
+				if(500 == e.status){
+					msgBox.Show({
+						Title: Lange["e.title"],
+						Val: strings.HtmlEncode(e.responseJSON.description),
+					});
+				}else{
+					msgBox.Show({
+						Title: Lange["e.title"],
+						Val: Lange["e.net"],
+					});
+				}
+			}).always(function () {
+				waitAction = false;
+			});
+		};
 		var msgName = kui.NewInputMsg({
 			Id: msgId++,
 			Btns: [
 				{
 					Name: Lange["Sure"],
-					Callback: function (params) {
-						this.Hide();
-
-						if (waitAction) {
-							return;
-						}
-
-						var val = this.GetVal();
-						val = $.trim(val)
-						if (!val) {
-							//alert("need name")
-							return;
-						}
-						var items = params.Items;
-						if(items.length == 1){
-							items[0].Name = val;
-						}else{
-							if(params.Style == 0){
-								for (var i = 0; i < items.length; i++) {
-									items[i].Name = val;
-								}
-							}else if(params.Style == 1){
-								var x = 0;
-								for (var i = 0; i < items.length; i++) {
-									items[i].Name = val + getFmtNumberStr(items.length,x);
-									++x;
-								}
-							}else{
-
-							}
-						}
-
-						waitAction = true;
-						var pid = Id;
-						$.ajax({
-							url: '/Root/RenameImgs',
-							type: 'POST',
-							dataType: 'json',
-							data: { str: JSON.stringify(items)},
-						}).done(function (result) {
-							if (result.Code) {
-								//失敗
-								msgBox.Show({
-									Title: Lange["e.title"],
-									Val: strings.HtmlEncode(result.Emsg),
-								});
-							} else {
-								if(Id == pid){
-									_list.Rename(items)
-								}
-							}
-						}).fail(function (e) {
-							if(500 == e.status){
-								msgBox.Show({
-									Title: Lange["e.title"],
-									Val: strings.HtmlEncode(e.responseJSON.description),
-								});
-							}else{
-								msgBox.Show({
-									Title: Lange["e.title"],
-									Val: Lange["e.net"],
-								});
-							}
-						}).always(function () {
-							waitAction = false;
-						});
+					Callback: function () {
+						onNameSure(this);
 					},
 				},
 				{
 					Name: Lange["Cancel"],
 				},
 			]
+		});
+		msgName.Jq().keydown(function(e) {
+			if(e.keyCode != 13){
+				return;
+			}
+			onNameSure(msgName);
 		});
 
 		var list = my.NewSourceList({

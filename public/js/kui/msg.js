@@ -57,6 +57,12 @@ ui.NewMsg = ui.NewMsg || function(initObj){
         Hide:function(){
             jqBtnCancel.click();
         },
+        Jq:function(){
+            return jq;
+        },
+        CallParams:function(){
+            return _callparam;
+        },
     };
 
     if(btns){
@@ -139,6 +145,12 @@ ui.NewInputMsg = ui.NewInputMsg || function(initObj){
         },
         GetVal:function(){
             return jqVal.val();
+        },
+        Jq:function(){
+            return jq;
+        },
+        CallParams:function(){
+            return _callparam;
         },
     };
 
@@ -230,6 +242,12 @@ ui.NewInputMsg2 = ui.NewInputMsg2 || function(initObj){
                 Read:jqValRead.text(),
                 Write:jqVal.val(),
             };
+        },
+        Jq:function(){
+            return jq;
+        },
+        CallParams:function(){
+            return _callparam;
         },
     };
 
