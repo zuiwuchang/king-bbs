@@ -59,6 +59,8 @@ Root.Rename=重命名
 Root.RenameNumber=重命名 [0~9]
 Root.Move=移動
 Root.Remove=移除
+Root.MoveTo=移動到
+Root.RefreshFolder=刷新檔案夾
 
 #	Upload	#
 Root.E.Hash.Empty=檔案hash不能爲空

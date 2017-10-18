@@ -48,3 +48,7 @@ type ResultFindImgs struct {
 	Childs []data.Imgs
 	Paths  []data.Imgs
 }
+type ResultFoldersImgs struct {
+	ResultBase
+	Folders []data.Imgs
+}

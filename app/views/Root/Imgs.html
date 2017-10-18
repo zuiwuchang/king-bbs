@@ -123,6 +123,9 @@
 <script src="/public/js/jQuery-contextMenu-2.6.2/dist/jquery.contextMenu.min.js" type="text/javascript"></script>
 <link href="/public/js/jQuery-contextMenu-2.6.2/dist/jquery.contextMenu.min.css" rel="stylesheet" type="text/css" />
 
+<link rel="stylesheet" href="/public/js/jstree/themes/default/style.min.css" />
+<script src="/public/js/jstree/jstree.min.js"></script>
+
 {{if .DevMode}}
 	<script type="text/javascript" src="/public/js/king-js/core.min.js"></script>
 {{else}}
@@ -140,6 +143,7 @@
 	<link rel="stylesheet" type="text/css" href="/public/views/Root/upload.css">
 
 	<script type="text/javascript" src="/public/views/Root/pathList.js"></script>
+	<script type="text/javascript" src="/public/views/Root/pathTree.js"></script>
 
 	<script type="text/javascript" src="/public/views/Root/Imgs.js"></script>
 {{else}}
@@ -150,6 +154,7 @@
 	<link rel="stylesheet" type="text/css" href="/public/views/Root/upload.css">
 	
 	<script type="text/javascript" src="/public/views/Root/pathList.min.js"></script>
+	<script type="text/javascript" src="/public/views/Root/pathTree.min.js"></script>
 
 	<script type="text/javascript" src="/public/views/Root/Imgs.min.js"></script>
 {{end}}
@@ -176,6 +181,8 @@ $(document).ready(function() {
 
 			"Remove":'{{msg . "Root.Remove"}}',
 			"Move":'{{msg . "Root.Move"}}',
+			"MoveTo":'{{msg . "Root.MoveTo"}}',
+			"RefreshFolder":'{{msg . "Root.RefreshFolder"}}',
 
 		},
 		//當前 位置

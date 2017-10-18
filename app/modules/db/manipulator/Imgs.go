@@ -250,3 +250,58 @@ func (m Imgs) FindPath(id int64) ([]data.Imgs, error) {
 
 	return beans, nil
 }
+
+//返回 檔案夾
+func (m Imgs) Folders() ([]data.Imgs, error) {
+	var rows []data.Imgs
+	if e := GetEngine().Where("Style = ?", data.SourceFolder).Find(&rows); e != nil {
+		return nil, e
+	}
+
+	return rows, nil
+}
+
+//移動檔案
+func (m Imgs) MoveTo(folder int64, ids []int64) error {
+	if len(ids) == 0 {
+		return nil
+	}
+
+	session := NewSession()
+	e := session.Begin()
+	if e != nil {
+		session.Close()
+		return e
+	}
+	defer func() {
+		if e == nil {
+			session.Commit()
+		} else {
+			session.Rollback()
+		}
+		session.Close()
+	}()
+
+	if folder != 0 {
+		//驗證 合法性
+		if e = m.folderCanMove(session, folder, ids); e != nil {
+			return e
+		}
+	}
+	wh := "id in ("
+	for i := 0; i < len(ids); i++ {
+		if i == 0 {
+			wh += fmt.Sprint(ids[i])
+		} else {
+			wh += "," + fmt.Sprint(ids[i])
+		}
+	}
+	wh += ")"
+	_, e = session.Where(wh).Cols("pid").Update(&data.Imgs{Pid: folder})
+	return e
+
+}
+func (m Imgs) folderCanMove(session *xorm.Session, folder int64, ids []int64) error {
+
+	return nil
+}

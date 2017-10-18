@@ -168,6 +168,7 @@ function NewPageContent(params) {
 		});
 	})();
 
+	//更新 當前 路徑
 	var UpdateId = function(id,popstate){
 		if (waitAction) {
 			return;
@@ -244,6 +245,79 @@ function NewPageContent(params) {
 		UpdateId(id,true);
 	});
 	
+	//目錄樹
+	var _tree = null;
+	(function(){
+		var requestMove = function(folder/*轉到的檔案夾 id*/,obj){
+			if(waitAction){
+				return;
+			}
+			waitAction = true;
+			//obj.Id 原檔案夾
+			//obj.Items 要移動的檔案
+			//alert(obj.Items.join(","));
+			$.ajax({
+				url: '/Root/ImgsMoveTo',
+				type: 'POST',
+				dataType: 'json',
+				data: {
+					folder: folder,
+					files:obj.Items.join(","),
+				},
+			})
+			.done(function(result) {
+				if(result.Code){
+					msgBox.Show({
+						Title: Lange["e.title"],
+						Val: strings.HtmlEncode(result.Emsg),
+					});
+				}else{
+					if(obj.Id != Id){
+						//刪除 節點
+						_list.Remove(obj.Items);
+					}
+				}
+			})
+			.fail(function(e) {
+				if(500 == e.status){
+					msgBox.Show({
+						Title: Lange["e.title"],
+						Val: strings.HtmlEncode(e.responseJSON.description),
+					});
+				}else{
+					msgBox.Show({
+						Title: Lange["e.title"],
+						Val: Lange["e.net"],
+					});
+				}
+			})
+			.always(function() {
+				waitAction = false;
+			});
+		};
+		_tree = my.NewPathTree({
+			Lange:Lange,
+			Btns:[
+				{
+					Name: Lange["Sure"],
+					Callback: function (obj) {
+						this.Hide();
+
+						var folder = this.GetVal();
+
+						if(folder == null || folder == obj.Id){
+							return;
+						}
+						requestMove(folder,obj);
+					},
+				},
+				{
+					Name: Lange["Cancel"],
+				},
+			]			
+		});
+	})();
+
 	//路徑
 	var _pathList;
 	(function(){
@@ -423,7 +497,16 @@ function NewPageContent(params) {
 						},
 					});
 				}else if(key == "Move"){
-					alert("Move")
+					var arrs = [];
+					for(var i=0;i<items.length;++i){
+						arrs.push(items[i].Id);
+					}
+					_tree.Show({
+						CallParams:{
+							Items:arrs,
+							Id:Id,
+						},
+					});
 				}else if(key == "Remove"){
 					if(waitAction){
 						return;

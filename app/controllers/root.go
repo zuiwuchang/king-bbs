@@ -194,6 +194,43 @@ func (c Root) PreviewImgs(id int64) revel.Result {
 	}
 	return c.Render(bean)
 }
+func (c Root) ImgsMoveTo(folder int64, files string) revel.Result {
+	var result ajax.ResultBase
+	files = strings.TrimSpace(files)
+	if files == "" {
+		return c.RenderJSON(&result)
+	}
+
+	strs := strings.Split(files, ",")
+	ids := make([]int64, 0, len(strs))
+	for i := 0; i < len(strs); i++ {
+		if id, _ := strconv.ParseInt(strs[i], 10, 64); id != 0 {
+			ids = append(ids, id)
+		}
+	}
+	if len(ids) > 0 {
+		var m manipulator.Imgs
+		if e := m.MoveTo(folder, ids); e != nil {
+			result.Code = ajax.ErrorDb
+			result.Emsg = e.Error()
+		}
+	}
+	return c.RenderJSON(&result)
+}
+
+//返回檔案夾
+func (c Root) FoldersImgs() revel.Result {
+	var result ajax.ResultFoldersImgs
+	var m manipulator.Imgs
+	if beans, e := m.Folders(); e != nil {
+		result.Code = ajax.ErrorDb
+		result.Emsg = e.Error()
+		return c.RenderJSON(&result)
+	} else {
+		result.Folders = beans
+	}
+	return c.RenderJSON(&result)
+}
 
 //公共視頻
 func (c Root) Videos(id int64) revel.Result {
