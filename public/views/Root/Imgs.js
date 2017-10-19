@@ -261,7 +261,7 @@ function NewPageContent(params) {
 				type: 'POST',
 				dataType: 'json',
 				data: {
-					folder: folder,
+					folder:folder,
 					files:obj.Items.join(","),
 				},
 			})
@@ -305,7 +305,7 @@ function NewPageContent(params) {
 
 						var folder = this.GetVal();
 
-						if(folder == null || folder == obj.Id){
+						if(folder == null || folder != obj.Id){
 							return;
 						}
 						requestMove(folder,obj);
