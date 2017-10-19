@@ -272,7 +272,7 @@ function NewPageContent(params) {
 						Val: strings.HtmlEncode(result.Emsg),
 					});
 				}else{
-					if(obj.Id != Id){
+					if(obj.Id == Id){
 						//刪除 節點
 						_list.Remove(obj.Items);
 					}

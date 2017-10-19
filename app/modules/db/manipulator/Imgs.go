@@ -302,6 +302,29 @@ func (m Imgs) MoveTo(folder int64, ids []int64) error {
 
 }
 func (m Imgs) folderCanMove(session *xorm.Session, folder int64, ids []int64) error {
+	keys := make(map[int64]bool)
+	for _, id := range ids {
+		keys[id] = true
+	}
+	if _, has := keys[folder]; has {
+		return fmt.Errorf("can't move to (%v)", folder)
+	}
+
+	id := folder
+	for id != 0 {
+		var bean data.Imgs
+		if has, e := session.Id(id).Where("style = ?", data.SourceFolder).Cols("pid").Get(&bean); e != nil {
+			return e
+		} else if !has {
+			return fmt.Errorf("folder not found (%v)", id)
+		}
+
+		if _, has := keys[id]; has {
+			return fmt.Errorf("can't move to (%v)", id)
+		}
+
+		id = bean.Pid
+	}
 
 	return nil
 }

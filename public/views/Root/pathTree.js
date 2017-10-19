@@ -172,8 +172,12 @@
 				if(!_tree){
 					return null;
 				}
+				var items = _tree.get_top_selected();
+				if(!items || items.length < 1){
+					return null;
+				}
 
-				return _tree.get_top_selected();
+				return items[0];
 			},
 			Show:function(obj){
 				//沒有初始化
