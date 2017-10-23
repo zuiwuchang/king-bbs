@@ -113,6 +113,7 @@ func Initialize() {
 	initTable(&data.Source{})
 	initTable(&data.SourceBlock{})
 	initTable(&data.Imgs{})
+	initTable(&data.GroupPlate{})
 }
 func initTable(bean interface{}) {
 	engine := GetEngine()
